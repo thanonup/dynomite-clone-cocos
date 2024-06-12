@@ -11,7 +11,7 @@
   },
   {
     "__type__": "cc.Scene",
-    "_name": "scene-2d",
+    "_name": "GameplayScene",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -288,7 +288,7 @@
     "_id": "debOSoC6JLPrQHX1/Y2X4b"
   },
   {
-    "__type__": "d3fabULMvpHXJQ7A4LPxIe0",
+    "__type__": "1d5c7l+kUtMEr9yRDkyRvuu",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -303,7 +303,7 @@
     "ball": {
       "__id__": 9
     },
-    "_id": "2f3wXK2cRLvrkpnhnQFAHR"
+    "_id": "b8GJHQir1Mgo4T/lszxJSn"
   },
   {
     "__type__": "cc.UITransform",
@@ -498,7 +498,7 @@
     "_id": "d72LostP5Lv5PJoKFMgbZc"
   },
   {
-    "__type__": "afe449aY+tOYZ31GDYaFxH/",
+    "__type__": "b3c94gFXZBL+JBg5/jpKBGw",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -513,7 +513,7 @@
     "collider": {
       "__id__": 13
     },
-    "_id": "767fllL+5LB7Ye/OEuYLsj"
+    "_id": "15RSKeq7RE650ep2czeubn"
   },
   {
     "__type__": "cc.Node",
