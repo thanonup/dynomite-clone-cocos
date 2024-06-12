@@ -1,5 +1,6 @@
 import { _decorator, Component, Node } from 'cc'
 import { SpawnerView } from './SpawnerView'
+import { GameOverView } from './Gameobject/GameOverView'
 const { ccclass, property } = _decorator
 
 @ccclass('GameInit')
@@ -9,8 +10,14 @@ export class GameInit extends Component {
     })
     public spawnerView: SpawnerView
 
+    @property({
+        type: GameOverView,
+    })
+    public gameOverView: GameOverView
+
     start() {
-        this.spawnerView.Init()
+        this.spawnerView.doInit()
+        this.gameOverView.doInit()
     }
 
     update(deltaTime: number) {}
