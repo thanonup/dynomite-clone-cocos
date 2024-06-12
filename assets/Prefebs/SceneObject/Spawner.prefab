@@ -85,7 +85,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "462j4MPWxKXpqO5LrLX4N/"
+    "fileId": "49PQmM/n5HYIVP9EeR+zKj"
   },
   {
     "__type__": "6164acZnyBDxLvC6xQ6O33P",
@@ -113,14 +113,14 @@
     "settingEggCountXY": {
       "__type__": "cc.Vec2",
       "x": 10,
-      "y": 2
+      "y": 15
     },
     "speedMove": 5,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "684EXDSFBJkpG7rmUQ4bA/"
+    "fileId": "bcs25lrcZDXLrt47tDP6+M"
   },
   {
     "__type__": "cc.PrefabInfo",
