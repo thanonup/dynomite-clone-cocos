@@ -1,8 +1,11 @@
-import { _decorator, Collider2D, Color, Component, Contact2DType, Graphics, Node } from 'cc'
+import { _decorator, Collider2D, Color, Component, Contact2DType, Graphics, IPhysics2DContact, Node } from 'cc'
+import { GameplayPod } from '../Pods/GameplayPod'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
 export class EggView extends Component {
+    private gamePlayPod: GameplayPod
+
     @property({
         type: Graphics,
     })
@@ -19,6 +22,8 @@ export class EggView extends Component {
     }
 
     doInit() {
+        this.gamePlayPod = GameplayPod.instance
+
         this.eggGraphics.circle(0, 0, 25)
         this.eggGraphics.fillColor = new Color('#ff0000')
         this.eggGraphics.fill()
@@ -26,8 +31,8 @@ export class EggView extends Component {
         this.eggColiider.on(Contact2DType.BEGIN_CONTACT, this.onContact, this)
     }
 
-    private onContact(selfCol: Collider2D, other: Collider2D) {
-        console.log('hit')
+    private onContact(selfCol: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
+        console.log('hit : ' + other.tag)
     }
 
     update(deltaTime: number) {}
