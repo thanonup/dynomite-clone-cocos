@@ -1,4 +1,4 @@
-import { _decorator, Component, EventMouse, Input, input, Node, RigidBody2D, Canvas, UITransform, Vec2, Vec3 } from 'cc'
+import { _decorator, Component, EventMouse, Input, input, Node, RigidBody2D, UITransform, Vec2, Vec3 } from 'cc'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
@@ -7,7 +7,7 @@ export class SlingShotController extends Component {
     canvas: UITransform
 
     @property({ type: RigidBody2D })
-    ball: RigidBody2D
+    egg: RigidBody2D
 
     speed = 0
     start() {
@@ -18,16 +18,16 @@ export class SlingShotController extends Component {
     update(deltaTime: number) {}
 
     private onMouseDown(event: EventMouse) {
-        if (this.ball == undefined) return
+        if (this.egg == undefined) return
 
-        this.ball.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), 10)
-        this.ball = undefined
+        this.egg.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), 10)
+        // this.ball = undefined
     }
 
     private getDirectionformBall(event: EventMouse): any {
         return this.subTractionVec2(
             this.getMousePositionInCanvas(event),
-            this.convertVec3ToVec2(this.ball.node.position)
+            this.convertVec3ToVec2(this.egg.node.position)
         ).normalize()
     }
 
@@ -45,6 +45,11 @@ export class SlingShotController extends Component {
 
     private subTractionVec2(vec_1: Vec2, vec_2: Vec2): Vec2 {
         var vec = new Vec2(vec_1.x - vec_2.x, vec_1.y - vec_2.y)
+        return vec
+    }
+
+    private sumTractionVec2(vec_1: Vec2, vec_2: Vec2): Vec2 {
+        var vec = new Vec2(vec_1.x + vec_2.x, vec_1.y + vec_2.y)
         return vec
     }
 
