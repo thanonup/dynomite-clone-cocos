@@ -1,27 +1,28 @@
 import {
     _decorator,
+    CCBoolean,
     CircleCollider2D,
     Collider2D,
     Color,
     Component,
     Contact2DType,
-    ERigidBody2DType,
-    Graphics,
     IPhysics2DContact,
-    Node,
     RigidBody2D,
+    Sprite,
     UITransform,
     Vec2,
     Vec3,
 } from 'cc'
+import { EggPod } from '../Pods/EggPod'
+import { EggBean } from '../Bean/EggBean'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
 export class EggView extends Component {
     @property({
-        type: Graphics,
+        type: Sprite,
     })
-    public eggGraphics: Graphics
+    public eggGraphics: Sprite
 
     @property({ type: CircleCollider2D })
     collider: CircleCollider2D
@@ -32,29 +33,49 @@ export class EggView extends Component {
     @property({ type: Vec2 })
     positionRef: Vec2
 
-    @property({ type: Boolean })
+    @property({ type: CCBoolean })
     isOnGrid: boolean
-    @property({ type: Boolean })
+    @property({ type: CCBoolean })
     isFalling: boolean
+
+    public eggPod: EggPod
 
     isCollided: boolean = false
     targetPosition: Vec3
 
     start() {
+        this.eggPod = new EggPod()
+        this.eggPod.eggList.push(this)
+
         // this.doInit()
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
     }
 
-    doInit() {
-        this.eggGraphics.circle(0, 0, 25)
-        this.eggGraphics.fillColor = new Color('#ff0000')
-        this.eggGraphics.fill()
+    public doInit() {
+        // this.eggPod.bean = eggBean
+        // this.eggGraphics.circle(0, 0, 25)
+        // this.eggGraphics.fillColor = new Color('#ff0000')
+        // this.eggGraphics.fill()
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        if (this.isOnGrid) return
+        if (otherCollider.tag == selfCollider.tag) {
+            var eggView = otherCollider.getComponent(EggView)
 
-        if (otherCollider.tag == selfCollider.tag) this.OnEggCollision(selfCollider, otherCollider)
+            // Check is Already in list
+            if (!this.eggPod.eggList.find((x) => x == eggView)) {
+                //Add new egg to list for all element in list
+                this.eggPod.eggList.forEach((eggElement) => {
+                    eggView.eggPod.eggList.forEach((egg) => {
+                        if (!eggElement.eggPod.eggList.find((x) => x == egg)) eggElement.eggPod.eggList.push(egg)
+                    })
+                })
+            }
+        }
+
+        if (!this.isOnGrid) {
+            if (otherCollider.tag == selfCollider.tag) this.OnEggCollision(selfCollider, otherCollider)
+        }
     }
 
     private OnEggCollision(selfCollider: Collider2D, otherCollider: Collider2D) {

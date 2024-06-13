@@ -1,13 +1,6 @@
-import { _decorator, Component, Node, SpriteFrame } from 'cc'
-const { ccclass, property } = _decorator
-
-@ccclass('EggBean')
-export class EggBean extends Component {
-    @property({ type: SpriteFrame })
-    spriteFrame: SpriteFrame
-
-    @property({ type: String })
-    eggName: String
-
-    EggBean() {}
+import { SpriteFrame } from 'cc'
+import { EggType } from '../States/EggType'
+export class EggBean {
+    public spriteFrame: SpriteFrame
+    public type: EggType
 }

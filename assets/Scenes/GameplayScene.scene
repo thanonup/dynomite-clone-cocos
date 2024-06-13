@@ -495,7 +495,7 @@
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 1,
     "_offset": {
@@ -525,7 +525,7 @@
     "positionRef": {
       "__type__": "cc.Vec2",
       "x": 37.5,
-      "y": 65
+      "y": 64.5
     },
     "_id": "bc+5NyTTRBgJdRseo18UnJ"
   },
@@ -1073,7 +1073,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 265,
+      "y": 264.5,
       "z": 0
     },
     "_lrot": {
@@ -1222,6 +1222,7 @@
     },
     "_enabled": true,
     "__prefab": null,
+    "eggGraphics": null,
     "collider": {
       "__id__": 34
     },
@@ -1231,7 +1232,7 @@
     "positionRef": {
       "__type__": "cc.Vec2",
       "x": 37.5,
-      "y": 65
+      "y": 64.5
     },
     "isOnGrid": true,
     "_id": "81noiXErxKx6yFUy5AGCGm"
@@ -1425,7 +1426,7 @@
     "positionRef": {
       "__type__": "cc.Vec2",
       "x": 37.5,
-      "y": 65
+      "y": 64.5
     },
     "isOnGrid": true,
     "_id": "ceHE6EkOhOSIEX4gdhvDx0"
@@ -1619,7 +1620,7 @@
     "positionRef": {
       "__type__": "cc.Vec2",
       "x": 37.5,
-      "y": 65
+      "y": 64.5
     },
     "isOnGrid": true,
     "_id": "66SLasofFAEafUjWYcPzQY"
