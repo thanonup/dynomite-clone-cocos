@@ -217,7 +217,7 @@
     "__prefab": {
       "__id__": 11
     },
-    "eggGraphics": {
+    "eggSprite": {
       "__id__": 4
     },
     "collider": {

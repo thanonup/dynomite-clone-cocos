@@ -3,7 +3,6 @@ import {
     CCBoolean,
     CircleCollider2D,
     Collider2D,
-    Color,
     Component,
     Contact2DType,
     IPhysics2DContact,
@@ -12,6 +11,7 @@ import {
     UITransform,
     Vec2,
     Vec3,
+    EventTarget,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -19,20 +19,14 @@ const { ccclass, property } = _decorator
 
 @ccclass('EggView')
 export class EggView extends Component {
-    @property({
-        type: Sprite,
-    })
-    public eggGraphics: Sprite
-
-    @property({ type: CircleCollider2D })
+    @property
+    eggSprite: Sprite
+    @property
     collider: CircleCollider2D
-
-    @property({ type: RigidBody2D })
+    @property
     rb: RigidBody2D
-
-    @property({ type: Vec2 })
+    @property
     positionRef: Vec2
-
     @property({ type: CCBoolean })
     isOnGrid: boolean
     @property({ type: CCBoolean })
@@ -49,6 +43,10 @@ export class EggView extends Component {
 
         // this.doInit()
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+
+        this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
+            this.eggSprite.spriteFrame = bean.spriteFrame
+        })
     }
 
     public doInit() {

@@ -1,8 +1,10 @@
 [
     {
+        "spritePath": "assets/Sprites/game-assets/chick.png",
         "type": "Chick"
     },
     {
+        "spritePath": "assets/Sprites/game-assets/wolf.png",
         "type": "Dog"
     }
 ]
