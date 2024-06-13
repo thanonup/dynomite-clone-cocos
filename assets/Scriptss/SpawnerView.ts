@@ -57,11 +57,13 @@ export class SpawnerView extends Component {
 
         const layout: Layout = eggGroup.getComponent(Layout)
         layout.constraintNum = this.settingEggCountXY.x
+        layout.enabled = true
+
         for (let i = 0; i < countAll; i++) {
             let egg = instantiate(this.eggPrefeb)
+            egg.getComponent(EggView).doInit(true)
             eggGroup.addChild(egg)
         }
-        layout.enabled = true
 
         this.scheduleOnce(() => {
             console.log('turn off grid layouts')

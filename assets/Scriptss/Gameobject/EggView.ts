@@ -51,7 +51,8 @@ export class EggView extends Component {
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
     }
 
-    public doInit() {
+    public doInit(isGrid: boolean) {
+        this.isOnGrid = isGrid
         // this.eggPod.bean = eggBean
         // this.eggGraphics.circle(0, 0, 25)
         // this.eggGraphics.fillColor = new Color('#ff0000')

@@ -212,7 +212,7 @@
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -240,6 +240,7 @@
       "__id__": 0
     },
     "fileId": "4bQf5csU1EooYOJBgqTmX2",
+    "instance": null,
     "targetOverrides": null
   }
 ]
