@@ -1,0 +1,5 @@
+{
+    "imports": {
+        "rxjs": "./assets/rxjs/index.ts"
+    }
+}

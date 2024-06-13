@@ -1,0 +1,24 @@
+{
+  "__version__": "3.0.7",
+  "builder": {
+    "options": {
+      "web-desktop": {
+        "configID": "1fcb04",
+        "services": []
+      },
+      "ios": {
+        "configID": "1fcb04",
+        "services": []
+      },
+      "android": {
+        "configID": "1fcb04",
+        "services": []
+      }
+    }
+  },
+  "builder-options": {
+    "configID": "1fcb04",
+    "services": [],
+    "__version__": "3.0.7"
+  }
+}
