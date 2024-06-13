@@ -1,4 +1,10 @@
+import { EventTarget } from 'cc'
+import { GameplayState } from '../States/GameplayState'
+
 export class GameplayPod {
+    public gameState: GameplayState = GameplayState.GamePlay
+    public gameStateEventTarget = new EventTarget()
+
     private static _instance: GameplayPod
 
     private static getInstance() {
@@ -11,5 +17,15 @@ export class GameplayPod {
 
     static get instance(): GameplayPod {
         return this.getInstance()
+    }
+
+    constructor() {
+        this.gameStateEventTarget.on(
+            'gameState',
+            (state: GameplayState) => {
+                this.gameState = state
+            },
+            this
+        )
     }
 }

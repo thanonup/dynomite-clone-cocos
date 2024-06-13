@@ -1,5 +1,7 @@
-import { _decorator, CCFloat, Component, instantiate, Layout, Node, Prefab, Vec2 } from 'cc'
+import { _decorator, CCFloat, Component, instantiate, Layout, Node, Prefab, tween, Vec2, Vec3 } from 'cc'
 import { EggView } from './Gameobject/EggView'
+import { GameplayPod } from './Pods/GameplayPod'
+import { GameplayState } from './States/GameplayState'
 
 const { ccclass, property } = _decorator
 
@@ -32,9 +34,12 @@ export class SpawnerView extends Component {
 
     private currentSpeed: number
     private eggGroup = []
+    private gameplayPod: GameplayPod
 
     public doInit() {
         console.log('Init Spawner')
+
+        this.gameplayPod = GameplayPod.instance
 
         const countAll = this.settingEggCountXY.x * this.settingEggCountXY.y
         const eggGroup = instantiate(this.eggPrefebGroup)
@@ -57,8 +62,9 @@ export class SpawnerView extends Component {
     }
 
     update(deltaTime: number) {
-        this.currentSpeed = this.speedMove * deltaTime
+        if (this.gameplayPod.gameState == GameplayState.GameOver) return
 
+        this.currentSpeed = this.speedMove * deltaTime
         this.eggGroup.forEach((x: Node) => {
             x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
         })
