@@ -1,4 +1,4 @@
-import { _decorator, CCFloat, Component, instantiate, Layout, Node, Prefab, tween, Vec2, Vec3 } from 'cc'
+import { _decorator, CCFloat, Component, instantiate, Layout, Node, Prefab, tween, UITransform, Vec2, Vec3 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { GameplayPod } from './Pods/GameplayPod'
 import { GameplayState } from './States/GameplayState'
@@ -7,6 +7,8 @@ const { ccclass, property } = _decorator
 
 @ccclass('SpawnerView')
 export class SpawnerView extends Component {
+    public static readonly POSITION_SPAWN: number = 20
+
     @property({
         type: Prefab,
     })
@@ -32,6 +34,7 @@ export class SpawnerView extends Component {
     })
     public speedMove: number
 
+    private heightSize: number
     private currentSpeed: number
     private eggGroup = []
     private gameplayPod: GameplayPod
@@ -41,8 +44,13 @@ export class SpawnerView extends Component {
 
         this.gameplayPod = GameplayPod.instance
 
+        this.spawnEggGroup(100)
+    }
+
+    private spawnEggGroup(yPostion: number) {
         const countAll = this.settingEggCountXY.x * this.settingEggCountXY.y
         const eggGroup = instantiate(this.eggPrefebGroup)
+        eggGroup.setPosition(new Vec3(0, yPostion, 0))
         eggGroup.mobility = 2
         this.spawnerObject.addChild(eggGroup)
         this.eggGroup.push(eggGroup)
@@ -59,6 +67,8 @@ export class SpawnerView extends Component {
             console.log('turn off grid layouts')
             layout.enabled = false
         }, 0.2)
+
+        this.heightSize = eggGroup.getComponent(UITransform).height
     }
 
     update(deltaTime: number) {
@@ -68,5 +78,9 @@ export class SpawnerView extends Component {
         this.eggGroup.forEach((x: Node) => {
             x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
         })
+
+        if (this.eggGroup[this.eggGroup.length - 1].position.y < SpawnerView.POSITION_SPAWN) {
+            this.spawnEggGroup(this.heightSize + SpawnerView.POSITION_SPAWN)
+        }
     }
 }

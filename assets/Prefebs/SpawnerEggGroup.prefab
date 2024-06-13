@@ -33,7 +33,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": 0,
+      "y": 100,
       "z": 0
     },
     "_lrot": {
@@ -74,12 +74,12 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 520,
-      "height": 1000
+      "height": 500
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.2
+      "y": 0
     },
     "_id": ""
   },
@@ -109,7 +109,7 @@
     "_startAxis": 0,
     "_paddingLeft": 25,
     "_paddingRight": 25,
-    "_paddingTop": 0,
+    "_paddingTop": 12.5,
     "_paddingBottom": 0,
     "_spacingX": 25,
     "_spacingY": 25,
@@ -134,6 +134,7 @@
       "__id__": 0
     },
     "fileId": "d07EIvT0xM+pdeZUBfFCek",
+    "instance": null,
     "targetOverrides": null
   }
 ]
