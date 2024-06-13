@@ -297,7 +297,7 @@
     "_id": "debOSoC6JLPrQHX1/Y2X4b"
   },
   {
-    "__type__": "d3fabULMvpHXJQ7A4LPxIe0",
+    "__type__": "1d5c7l+kUtMEr9yRDkyRvuu",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -309,10 +309,10 @@
     "canvas": {
       "__id__": 8
     },
-    "ball": {
+    "egg": {
       "__id__": 9
     },
-    "_id": "2f3wXK2cRLvrkpnhnQFAHR"
+    "_id": "cd8w6NDhtOq7G7PiGVYKOn"
   },
   {
     "__type__": "cc.UITransform",
@@ -361,7 +361,7 @@
       "y": 0
     },
     "_angularVelocity": 0,
-    "_fixedRotation": false,
+    "_fixedRotation": true,
     "_id": "d3sRvaAqROhYBRFc6rtP9a"
   },
   {
@@ -507,7 +507,7 @@
     "_id": "d72LostP5Lv5PJoKFMgbZc"
   },
   {
-    "__type__": "6e22d80qW5GXrcAAnoDUsJK",
+    "__type__": "de877izM+9EjYJh+r7ImgE/",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -527,7 +527,7 @@
       "x": 37.5,
       "y": 65
     },
-    "_id": "f5/zmU2ehMlbNoNuaIWMdh"
+    "_id": "bc+5NyTTRBgJdRseo18UnJ"
   },
   {
     "__type__": "cc.Node",
@@ -1174,7 +1174,7 @@
     "bullet": false,
     "awakeOnLoad": true,
     "_group": 1,
-    "_type": 1,
+    "_type": 2,
     "_allowSleep": true,
     "_gravityScale": 0,
     "_linearDamping": 0,
@@ -1185,7 +1185,7 @@
       "y": 0
     },
     "_angularVelocity": 0,
-    "_fixedRotation": false,
+    "_fixedRotation": true,
     "_id": "4biZv7pWlDC7Tk0LTFtJNY"
   },
   {
@@ -1201,7 +1201,7 @@
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 1,
     "_offset": {
@@ -1213,7 +1213,7 @@
     "_id": "10wFTZmtVJBL2sv/ICTc+4"
   },
   {
-    "__type__": "6e22d80qW5GXrcAAnoDUsJK",
+    "__type__": "de877izM+9EjYJh+r7ImgE/",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1222,7 +1222,6 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "eggGraphics": null,
     "collider": {
       "__id__": 34
     },
@@ -1231,10 +1230,11 @@
     },
     "positionRef": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": 37.5,
+      "y": 65
     },
-    "_id": "ccKoOc/rtPc7nKvuC9c3wl"
+    "isOnGrid": true,
+    "_id": "81noiXErxKx6yFUy5AGCGm"
   },
   {
     "__type__": "cc.Node",
@@ -1368,7 +1368,7 @@
     "bullet": false,
     "awakeOnLoad": true,
     "_group": 1,
-    "_type": 1,
+    "_type": 2,
     "_allowSleep": true,
     "_gravityScale": 0,
     "_linearDamping": 0,
@@ -1379,7 +1379,7 @@
       "y": 0
     },
     "_angularVelocity": 0,
-    "_fixedRotation": false,
+    "_fixedRotation": true,
     "_id": "2aBynAs2tIIrlr2rdPCG1c"
   },
   {
@@ -1395,7 +1395,7 @@
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 1,
     "_offset": {
@@ -1407,7 +1407,7 @@
     "_id": "e13Cu1fhpJtrEFjX2gxj8E"
   },
   {
-    "__type__": "6e22d80qW5GXrcAAnoDUsJK",
+    "__type__": "de877izM+9EjYJh+r7ImgE/",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1422,7 +1422,13 @@
     "rb": {
       "__id__": 39
     },
-    "_id": "9fRJaIvShJb5y8zXiNdV0H"
+    "positionRef": {
+      "__type__": "cc.Vec2",
+      "x": 37.5,
+      "y": 65
+    },
+    "isOnGrid": true,
+    "_id": "ceHE6EkOhOSIEX4gdhvDx0"
   },
   {
     "__type__": "cc.Node",
@@ -1556,7 +1562,7 @@
     "bullet": false,
     "awakeOnLoad": true,
     "_group": 1,
-    "_type": 1,
+    "_type": 2,
     "_allowSleep": true,
     "_gravityScale": 0,
     "_linearDamping": 0,
@@ -1567,7 +1573,7 @@
       "y": 0
     },
     "_angularVelocity": 0,
-    "_fixedRotation": false,
+    "_fixedRotation": true,
     "_id": "3aMraHe75JCIpAHGERn6uL"
   },
   {
@@ -1583,7 +1589,7 @@
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 1,
     "_offset": {
@@ -1595,7 +1601,7 @@
     "_id": "83ygI70CJKkoLRT2EZTtzV"
   },
   {
-    "__type__": "6e22d80qW5GXrcAAnoDUsJK",
+    "__type__": "de877izM+9EjYJh+r7ImgE/",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -1610,7 +1616,13 @@
     "rb": {
       "__id__": 45
     },
-    "_id": "7ab1jZVLFAWpPpBAn6YZ3x"
+    "positionRef": {
+      "__type__": "cc.Vec2",
+      "x": 37.5,
+      "y": 65
+    },
+    "isOnGrid": true,
+    "_id": "66SLasofFAEafUjWYcPzQY"
   },
   {
     "__type__": "cc.Canvas",
