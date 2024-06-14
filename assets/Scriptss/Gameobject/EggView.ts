@@ -41,17 +41,16 @@ export class EggView extends Component {
     isCollided: boolean = false
     targetPosition: Vec3
 
-    start() {
-        // this.doInit()
-    }
+    start() {}
 
-    public doInit(bean: EggBean, isGrid: boolean) {
+    public async doInit(bean: EggBean, isGrid: boolean) {
         this.isOnGrid = isGrid
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
+
         this.eggPod.ChangeBean(bean)
 
-        this.loadImage(bean)
+        await this.loadImage(bean)
 
         this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
             this.loadImage(bean)
@@ -60,10 +59,14 @@ export class EggView extends Component {
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
     }
 
-    private loadImage(bean: EggBean) {
-        resources.load(bean.spritePath, ImageAsset, (err, asset) => {
-            if (err) console.log(err)
-            else this.eggSprite.spriteFrame = SpriteFrame.createWithImage(asset)
+    private async loadImage(bean: EggBean) {
+        await resources.load(bean.spritePath, SpriteFrame, (err, spriteFrame) => {
+            if (err) {
+                console.error(err)
+            } else {
+                spriteFrame.addRef()
+                this.eggSprite.getComponent(Sprite).spriteFrame = spriteFrame
+            }
         })
     }
 

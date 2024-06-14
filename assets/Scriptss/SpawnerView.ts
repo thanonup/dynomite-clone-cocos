@@ -63,14 +63,16 @@ export class SpawnerView extends Component {
         this.gameplayPod = GameplayPod.instance
 
         await resources.load('Data/EggData', (err, asset: any) => {
-            if (err) console.log(err)
-            else this.beanList = asset.json
+            if (err) {
+                console.log(err)
+            } else {
+                this.beanList = asset.json
+                this.spawnEggGroup(100)
+            }
         })
-
-        this.spawnEggGroup(100)
     }
 
-    private spawnEggGroup(yPostion: number) {
+    private async spawnEggGroup(yPostion: number) {
         const countAll = this.settingEggCountXY.x * this.settingEggCountXY.y
         const eggGroup = instantiate(this.eggPrefebGroup)
         eggGroup.setPosition(new Vec3(0, yPostion, 0))
@@ -85,9 +87,11 @@ export class SpawnerView extends Component {
         for (let i = 0; i < countAll; i++) {
             var randomNumber = Math.floor(Math.random() * this.beanList.length)
             let egg = instantiate(this.eggPrefeb)
-            egg.getComponent(EggView).doInit(this.beanList[randomNumber], true)
+            await egg.getComponent(EggView).doInit(this.beanList[randomNumber], true)
             eggGroup.addChild(egg)
         }
+
+        this.gameplayPod.firstLoad = true
 
         this.scheduleOnce(() => {
             console.log('turn off grid layouts')
@@ -100,12 +104,12 @@ export class SpawnerView extends Component {
     update(deltaTime: number) {
         if (this.gameplayPod.gameState == GameplayState.GameOver) return
 
-        this.currentSpeed = this.speedMove * deltaTime
-        this.eggGroup.forEach((x: Node) => {
-            x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
-        })
+        if (this.gameplayPod.firstLoad) {
+            this.currentSpeed = this.speedMove * deltaTime
+            this.eggGroup.forEach((x: Node) => {
+                x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
+            })
 
-        if (this.eggGroup[this.eggGroup.length - 1] != undefined) {
             if (this.eggGroup[this.eggGroup.length - 1].position.y < SpawnerView.POSITION_SPAWN) {
                 this.spawnEggGroup(this.heightSize + SpawnerView.POSITION_SPAWN)
             }

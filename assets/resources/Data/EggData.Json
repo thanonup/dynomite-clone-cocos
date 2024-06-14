@@ -1,10 +1,10 @@
 [
     {
-        "spritePath": "Sprites/game-assets/chick",
+        "spritePath": "Sprites/game-assets/chick/spriteFrame",
         "type": "Chick"
     },
     {
-        "spritePath": "Sprites/game-assets/wolf",
+        "spritePath": "Sprites/game-assets/wolf/spriteFrame",
         "type": "Dog"
     }
 ]

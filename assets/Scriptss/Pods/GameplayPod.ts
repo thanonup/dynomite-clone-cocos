@@ -4,6 +4,7 @@ import { GameplayState } from '../States/GameplayState'
 export class GameplayPod {
     public gameState: GameplayState = GameplayState.GamePlay
     public gameStateEventTarget = new EventTarget()
+    public firstLoad: boolean = false
 
     private static _instance: GameplayPod
 

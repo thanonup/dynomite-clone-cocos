@@ -910,7 +910,7 @@
     "propertyPath": [
       "speedMove"
     ],
-    "value": 20
+    "value": 10
   },
   {
     "__type__": "cc.TargetInfo",

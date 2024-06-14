@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc'
+import { _decorator, assetManager, Component, ImageAsset, Node, resources, SpriteFrame } from 'cc'
 import { SpawnerView } from './SpawnerView'
 import { GameOverView } from './Gameobject/GameOverView'
 const { ccclass, property } = _decorator
@@ -16,9 +16,17 @@ export class GameInit extends Component {
     public gameOverView: GameOverView
 
     start() {
+        this.init()
+    }
+
+    private async init() {
+        await this.loadAsset()
+
         this.spawnerView.doInit()
         this.gameOverView.doInit()
     }
+
+    private async loadAsset() {}
 
     update(deltaTime: number) {}
 }
