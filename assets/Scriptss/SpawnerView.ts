@@ -105,8 +105,10 @@ export class SpawnerView extends Component {
             x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
         })
 
-        if (this.eggGroup[this.eggGroup.length - 1].position.y < SpawnerView.POSITION_SPAWN) {
-            this.spawnEggGroup(this.heightSize + SpawnerView.POSITION_SPAWN)
+        if (this.eggGroup[this.eggGroup.length - 1] != undefined) {
+            if (this.eggGroup[this.eggGroup.length - 1].position.y < SpawnerView.POSITION_SPAWN) {
+                this.spawnEggGroup(this.heightSize + SpawnerView.POSITION_SPAWN)
+            }
         }
     }
 }
