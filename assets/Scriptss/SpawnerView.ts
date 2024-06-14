@@ -58,10 +58,12 @@ export class SpawnerView extends Component {
 
     private beanList: Array<EggBean>
 
-    public async doInit() {
+    protected onLoad(): void {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
+    }
 
+    public async doInit() {
         await resources.load('Data/EggData', (err, asset: any) => {
             if (err) {
                 console.log(err)
