@@ -12,6 +12,10 @@ import {
     Vec2,
     Vec3,
     EventTarget,
+    resources,
+    SpriteFrame,
+    math,
+    ImageAsset,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -38,22 +42,29 @@ export class EggView extends Component {
     targetPosition: Vec3
 
     start() {
-        this.eggPod = new EggPod()
-        this.eggPod.eggList.push(this)
-
         // this.doInit()
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
-
-        this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
-            this.eggSprite.spriteFrame = bean.spriteFrame
-        })
     }
 
-    public doInit() {
-        // this.eggPod.bean = eggBean
-        // this.eggGraphics.circle(0, 0, 25)
-        // this.eggGraphics.fillColor = new Color('#ff0000')
-        // this.eggGraphics.fill()
+    public doInit(bean: EggBean, isGrid: boolean) {
+        this.isOnGrid = isGrid
+        this.eggPod = new EggPod()
+        this.eggPod.eggList.push(this)
+        this.eggPod.ChangeBean(bean)
+
+        this.loadImage(bean)
+
+        this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
+            this.loadImage(bean)
+        })
+
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+    }
+
+    private loadImage(bean: EggBean) {
+        resources.load(bean.spritePath, ImageAsset, (err, asset) => {
+            if (err) console.log(err)
+            else this.eggSprite.spriteFrame = SpriteFrame.createWithImage(asset)
+        })
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
