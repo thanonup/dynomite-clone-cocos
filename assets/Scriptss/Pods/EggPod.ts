@@ -21,9 +21,10 @@ export class EggPod {
         )
 
         this.eventTarget.on('EggListChange', (eggList: Array<EggView>) => {
-            eggList.forEach((x) => {
-                console.log(x.name)
-            })
+            //dont do this
+            // eggList.forEach((x) => {
+            //     console.log(x.name)
+            // })
         })
     }
 
@@ -36,7 +37,7 @@ export class EggPod {
         this.eggList.forEach((eggElement) => {
             eggView.eggPod.eggList.forEach((egg) => {
                 if (!eggElement.eggPod.eggList.find((x) => x == egg)) {
-                    this.onAddEggList(eggView)
+                    eggElement.eggPod.onAddEggList(egg)
                 }
             })
         })
@@ -56,7 +57,7 @@ export class EggPod {
     public onRemoveEggFromEggList(eggView: EggView) {
         const index = this.eggList.indexOf(eggView, 0)
         if (index > -1) this.eggList.splice(index, 1)
-        this.eventTarget.emit('EggListChange', this.eggList)
+        // this.eventTarget.emit('EggListChange', this.eggList)
     }
 
     public addEggToEggListInType(eggView: EggView) {

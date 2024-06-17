@@ -155,7 +155,6 @@ export class EggView extends Component {
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log('test')
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
 
@@ -165,14 +164,12 @@ export class EggView extends Component {
                 this.eggPod.addEggToEggList(eggView)
             }
 
-            //add new same type egg at list
+            // add new same type egg at list
             if (eggView.eggPod.bean.type == this.eggPod.bean.type) {
                 if (!this.eggPod.eggListInType.find((x) => x == eggView)) this.eggPod.addEggToEggListInType(eggView)
             }
-        }
 
-        if (this.isBullet) {
-            if (otherCollider.tag == selfCollider.tag) this.OnEggCollision(selfCollider, otherCollider)
+            if (this.isBullet) this.OnEggCollision(selfCollider, otherCollider)
         }
     }
 }
