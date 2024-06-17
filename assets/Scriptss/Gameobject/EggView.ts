@@ -19,6 +19,7 @@ import {
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
+import { AssetManagerManual } from '../Managers/AssetManagerManual'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -43,31 +44,20 @@ export class EggView extends Component {
 
     start() {}
 
-    public async doInit(bean: EggBean, isGrid: boolean) {
+    public doInit(bean: EggBean, isGrid: boolean) {
         this.isOnGrid = isGrid
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
 
         this.eggPod.ChangeBean(bean)
 
-        await this.loadImage(bean)
+        this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
 
         this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
-            this.loadImage(bean)
+            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
         })
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
-    }
-
-    private async loadImage(bean: EggBean) {
-        await resources.load(bean.spritePath, SpriteFrame, (err, spriteFrame) => {
-            if (err) {
-                console.error(err)
-            } else {
-                spriteFrame.addRef()
-                this.eggSprite.getComponent(Sprite).spriteFrame = spriteFrame
-            }
-        })
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {

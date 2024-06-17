@@ -53,28 +53,31 @@ export class SpawnerView extends Component {
 
     private heightSize: number
     private currentSpeed: number
+    private spawnLoopCount: number = 0
     private eggGroup = []
     private gameplayPod: GameplayPod
 
-    private beanList: Array<EggBean>
-
     protected onLoad(): void {
-        console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
     }
 
-    public async doInit() {
-        await resources.load('Data/EggData', (err, asset: any) => {
-            if (err) {
-                console.log(err)
-            } else {
-                this.beanList = asset.json
-                this.spawnEggGroup(100)
-            }
-        })
+    public doInit() {
+        console.log('Init Spawner')
+
+        this.spawnEggGroup(100)
+
+        this.gameplayPod.gameStateEventTarget.on(
+            'gameState',
+            (state: GameplayState) => {
+                if (state == GameplayState.GamePlay) {
+                    this.spawnLoopCount = 0
+                }
+            },
+            this
+        )
     }
 
-    private async spawnEggGroup(yPostion: number) {
+    private spawnEggGroup(yPostion: number) {
         const countAll = this.settingEggCountXY.x * this.settingEggCountXY.y
         const eggGroup = instantiate(this.eggPrefebGroup)
         eggGroup.setPosition(new Vec3(0, yPostion, 0))
@@ -87,9 +90,11 @@ export class SpawnerView extends Component {
         layout.enabled = true
 
         for (let i = 0; i < countAll; i++) {
-            var randomNumber = Math.floor(Math.random() * this.beanList.length)
+            var randomNumber = Math.floor(
+                Math.random() * (this.gameplayPod.beanEggDataList.length - (2 - this.spawnLoopCount))
+            )
             let egg = instantiate(this.eggPrefeb)
-            await egg.getComponent(EggView).doInit(this.beanList[randomNumber], true)
+            egg.getComponent(EggView).doInit(this.gameplayPod.beanEggDataList[randomNumber], true)
             eggGroup.addChild(egg)
         }
 
@@ -101,6 +106,10 @@ export class SpawnerView extends Component {
         }, 0.2)
 
         this.heightSize = eggGroup.getComponent(UITransform).height
+
+        if (this.spawnLoopCount < 2) {
+            this.spawnLoopCount++
+        }
     }
 
     update(deltaTime: number) {

@@ -1,10 +1,22 @@
 [
     {
-        "spritePath": "Sprites/game-assets/chick/spriteFrame",
+        "keySprite": "chick",
         "type": "Chick"
     },
     {
-        "spritePath": "Sprites/game-assets/wolf/spriteFrame",
+        "keySprite": "dog",
         "type": "Dog"
+    },
+    {
+        "keySprite": "cow",
+        "type": "Cow"
+    },
+    {
+        "keySprite": "pig",
+        "type": "Pig"
+    },
+    {
+        "keySprite": "rat",
+        "type": "Rat"
     }
 ]

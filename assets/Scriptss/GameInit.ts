@@ -1,6 +1,8 @@
-import { _decorator, assetManager, Component, ImageAsset, Node, resources, SpriteFrame } from 'cc'
+import { _decorator, AssetManager, assetManager, Component, ImageAsset, Node, resources, SpriteFrame } from 'cc'
 import { SpawnerView } from './SpawnerView'
 import { GameOverView } from './Gameobject/GameOverView'
+import { GameplayPod } from './Pods/GameplayPod'
+import { AssetManagerManual } from './Managers/AssetManagerManual'
 const { ccclass, property } = _decorator
 
 @ccclass('GameInit')
@@ -15,18 +17,56 @@ export class GameInit extends Component {
     })
     public gameOverView: GameOverView
 
+    private gameplayPod: GameplayPod
+    private assetManager: AssetManagerManual
+
+    private assetData
+
     start() {
         this.init()
     }
 
     private async init() {
-        await this.loadAsset()
+        this.gameplayPod = GameplayPod.instance
+        this.assetManager = AssetManagerManual.instance
+
+        await this.loadEggData()
+        await this.loadAssetData()
+        await this.assetManager.loadSpriteFrameData(this.assetData)
 
         this.spawnerView.doInit()
         this.gameOverView.doInit()
     }
 
-    private async loadAsset() {}
+    private async loadEggData() {
+        return new Promise<string>((resolve, reject) => {
+            resources.load('Data/EggData', (err, asset: any) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    console.log('Load EggData is Done')
+                    this.gameplayPod.beanEggDataList = asset.json
+
+                    resolve('load done')
+                }
+            })
+        })
+    }
+
+    private async loadAssetData() {
+        return new Promise<string>((resolve, reject) => {
+            resources.load('Data/SpriteAssetLoad', (err, asset: any) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    console.log('Load SpriteAssetLoad is Done')
+                    this.assetData = asset.json
+
+                    resolve('load done')
+                }
+            })
+        })
+    }
 
     update(deltaTime: number) {}
 }

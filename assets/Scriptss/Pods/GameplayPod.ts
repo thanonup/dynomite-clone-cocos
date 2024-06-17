@@ -1,7 +1,9 @@
 import { EventTarget } from 'cc'
 import { GameplayState } from '../States/GameplayState'
+import { EggBean } from '../Bean/EggBean'
 
 export class GameplayPod {
+    public beanEggDataList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
     public gameStateEventTarget = new EventTarget()
     public firstLoad: boolean = false
