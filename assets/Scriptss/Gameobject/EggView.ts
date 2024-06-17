@@ -15,6 +15,7 @@ import {
     SpriteFrame,
     ImageAsset,
     CCFloat,
+    ParticleSystem2D,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -42,6 +43,11 @@ export class EggView extends Component {
     private eggSprite: Sprite
     @property
     private collider: CircleCollider2D
+
+    @property({ type: ParticleSystem2D })
+    private particleBomb1: ParticleSystem2D
+    @property({ type: ParticleSystem2D })
+    private particleBomb2: ParticleSystem2D
 
     private speedMove: number
     private isCollided: boolean = false
@@ -85,7 +91,10 @@ export class EggView extends Component {
         this.isOnGrid = true
 
         if (this.eggPod.eggListInType.length > 2) {
-            this.eggPod.eggListInType.forEach((x) => x.node.destroy())
+            this.eggPod.eggListInType.forEach((x) => {
+                const eggView = x.getComponent(EggView)
+                eggView.onBeforeDestory()
+            })
         }
     }
 
@@ -129,6 +138,15 @@ export class EggView extends Component {
 
             return
         }
+    }
+
+    public onBeforeDestory() {
+        this.particleBomb1.resetSystem()
+        this.particleBomb2.resetSystem()
+
+        this.scheduleOnce(() => {
+            this.node.destroy()
+        }, 3)
     }
 
     public onDestroy() {
