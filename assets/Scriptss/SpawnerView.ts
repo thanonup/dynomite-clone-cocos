@@ -3,7 +3,6 @@ import {
     BoxCollider2D,
     CCFloat,
     Component,
-    Contact2DType,
     instantiate,
     Node,
     Prefab,
@@ -103,13 +102,8 @@ export class SpawnerView extends Component {
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0
-<<<<<<< HEAD
             if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggCount, 0, -1.5)
             else this.spawnEggGroup(this.settingEggCount, this.offset.x, -2)
-=======
-            if (this.count % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, 0)
-            else this.spawnEggGroup(this.settingEggCount, this.offset.x, 0)
->>>>>>> feature/Bundit
             this.count++
         }
     }
