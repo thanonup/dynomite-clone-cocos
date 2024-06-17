@@ -1,0 +1,22 @@
+[
+    {
+        "key": "chick",
+        "path": "Sprites/game-assets/chick/spriteFrame"
+    },
+    {
+        "key": "dog",
+        "path": "Sprites/game-assets/wolf/spriteFrame"
+    },
+    {
+        "key": "cow",
+        "path": "Sprites/game-assets/cow/spriteFrame"
+    },
+    {
+        "key": "pig",
+        "path": "Sprites/game-assets/pig/spriteFrame"
+    },
+    {
+        "key": "rat",
+        "path": "Sprites/game-assets/rat/spriteFrame"
+    }
+]

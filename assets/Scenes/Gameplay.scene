@@ -1124,7 +1124,7 @@
     "propertyPath": [
       "speed"
     ],
-    "value": 20
+    "value": 10
   },
   {
     "__type__": "CCPropertyOverrideInfo",

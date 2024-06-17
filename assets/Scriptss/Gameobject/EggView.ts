@@ -18,6 +18,7 @@ import {
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
+import { AssetManagerManual } from '../Managers/AssetManagerManual'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -51,22 +52,14 @@ export class EggView extends Component {
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
         this.eggPod.eggListInType.push(this)
-        this.eggPod.ChangeBean(bean)
-
-        this.loadImage(bean)
 
         this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
-            this.loadImage(bean)
+            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
         })
+
+        this.eggPod.ChangeBean(bean)
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
-    }
-
-    private loadImage(bean: EggBean) {
-        resources.load(bean.spritePath, ImageAsset, (err, asset) => {
-            if (err) console.log(err)
-            else this.eggSprite.spriteFrame = SpriteFrame.createWithImage(asset)
-        })
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
@@ -131,31 +124,6 @@ export class EggView extends Component {
                     otherCollider.node.position.y
                 )
         }
-
-        // console.log(this.node.getPosition().y)
-        // console.log(otherCollider.node.getPosition().y - otherCollider.node.getComponent(UITransform).height / 2)
-        // console.log(otherCollider.node.getPosition().y)
-
-        // if (
-        //     selfCollider.node.position.y <
-        //     otherCollider.node.position.y - otherCollider.node.getComponent(UITransform).height / 2
-        // ) {
-        //     vec = new Vec3(
-        //         otherCollider.node.position.x,
-        //         otherCollider.node.position.y - otherCollider.node.getComponent(UITransform).height
-        //     )
-        // } else {
-        //     if (selfCollider.node.position.x < otherCollider.node.position.x)
-        //         vec = new Vec3(
-        //             otherCollider.node.position.x - otherCollider.node.getComponent(UITransform).width,
-        //             otherCollider.node.position.y
-        //         )
-        //     else
-        //         vec = new Vec3(
-        //             otherCollider.node.position.x + otherCollider.node.getComponent(UITransform).width,
-        //             otherCollider.node.position.y
-        //         )
-        // }
 
         return vec
     }
