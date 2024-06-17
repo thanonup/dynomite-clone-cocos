@@ -3,9 +3,10 @@ import { GameplayState } from '../States/GameplayState'
 import { EggBean } from '../Bean/EggBean'
 
 export class GameplayPod {
+    public gameSpeed: number = 0
     public beanEggDataList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
-    public gameStateEventTarget = new EventTarget()
+    public gameplayPodEventTarget = new EventTarget()
     public firstLoad: boolean = false
 
     private static _instance: GameplayPod
@@ -23,10 +24,18 @@ export class GameplayPod {
     }
 
     constructor() {
-        this.gameStateEventTarget.on(
+        this.gameplayPodEventTarget.on(
             'gameState',
             (state: GameplayState) => {
                 this.gameState = state
+            },
+            this
+        )
+
+        this.gameplayPodEventTarget.on(
+            'gameSpeed',
+            (speed: number) => {
+                this.gameSpeed = speed
             },
             this
         )

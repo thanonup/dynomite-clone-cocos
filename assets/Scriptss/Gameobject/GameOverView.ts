@@ -1,4 +1,14 @@
-import { _decorator, Collider2D, Component, Contact2DType, EventTarget, Graphics, IPhysics2DContact, Node } from 'cc'
+import {
+    _decorator,
+    Collider2D,
+    Component,
+    Contact2DType,
+    EventTarget,
+    Graphics,
+    IPhysics2DContact,
+    Node,
+    UITransform,
+} from 'cc'
 import { GameplayPod } from '../Pods/GameplayPod'
 import { GameplayState } from '../States/GameplayState'
 
@@ -22,7 +32,12 @@ export class GameOverView extends Component {
         console.log('Init GameOverView')
         this.gameplayPod = GameplayPod.instance
 
-        this.gameoverLine.rect(-280, 0, 560, 5)
+        this.gameoverLine.rect(
+            -this.node.getComponent(UITransform).width / 2,
+            0,
+            this.node.getComponent(UITransform).width,
+            5
+        )
         this.gameoverLine.fill()
     }
 

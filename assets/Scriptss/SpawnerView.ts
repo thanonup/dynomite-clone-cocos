@@ -49,7 +49,7 @@ export class SpawnerView extends Component {
     private offset: Vec2
 
     @property({ type: CCFloat })
-    speed: number
+    startGameSpeed: number
 
     private heightSize: number
     private gameplayPod: GameplayPod
@@ -59,6 +59,7 @@ export class SpawnerView extends Component {
     public async doInit() {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
+        this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
 
         await resources.load('Data/EggData', (err, asset: any) => {
             if (err) console.log(err)
@@ -91,7 +92,7 @@ export class SpawnerView extends Component {
     private timer: number = 0
     private count: number = 0
     update(deltaTime: number) {
-        this.timer += deltaTime * this.speed
+        this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0
             console.log('spawn')

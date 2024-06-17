@@ -19,35 +19,36 @@ import {
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
 import { AssetManagerManual } from '../Managers/AssetManagerManual'
+import { GameplayPod } from '../Pods/GameplayPod'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
 export class EggView extends Component {
     @property
-    eggSprite: Sprite
-    @property
-    collider: CircleCollider2D
-    @property
     public rb: RigidBody2D
-    @property
-    positionRef: Vec2
-    @property({ type: CCBoolean })
-    isOnGrid: boolean
-    @property({ type: CCBoolean })
-    isFalling: boolean
-
-    @property({
-        type: CCFloat,
-    })
-    public speedMove: number
-
     @property({ type: EggPod })
     public eggPod: EggPod
 
-    isCollided: boolean = false
-    targetPosition: Vec3
+    @property
+    private eggSprite: Sprite
+    @property
+    private collider: CircleCollider2D
+    @property
+    private positionRef: Vec2
+    @property({ type: CCBoolean })
+    private isOnGrid: boolean
+    @property({ type: CCBoolean })
+    private isFalling: boolean
+
+    private speedMove: number
+    private isCollided: boolean = false
+    private targetPosition: Vec3
+
+    private gameplayPod: GameplayPod
 
     public doInit(bean: EggBean, isGrid: boolean) {
+        this.gameplayPod = GameplayPod.instance
+
         this.isOnGrid = isGrid
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
@@ -55,6 +56,11 @@ export class EggView extends Component {
 
         this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
             this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
+        })
+
+        this.speedMove = this.gameplayPod.gameSpeed
+        this.gameplayPod.gameplayPodEventTarget.on('gameSpeed', (speed: number) => {
+            this.speedMove = speed
         })
 
         this.eggPod.ChangeBean(bean)
