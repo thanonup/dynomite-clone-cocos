@@ -28,15 +28,18 @@
       },
       {
         "__id__": 6
+      },
+      {
+        "__id__": 8
       }
     ],
     "_prefab": {
-      "__id__": 8
+      "__id__": 10
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -287.5,
-      "y": 580,
+      "x": 0,
+      "y": 505,
       "z": 0
     },
     "_lrot": {
@@ -76,8 +79,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 25,
-      "height": 25
+      "width": 580,
+      "height": 50
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -98,14 +101,14 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": true,
+    "_enabled": false,
     "__prefab": {
       "__id__": 5
     },
     "tag": 0,
     "_group": 1,
     "_density": 1,
-    "_sensor": false,
+    "_sensor": true,
     "_friction": 0.2,
     "_restitution": 0,
     "_offset": {
@@ -140,6 +143,9 @@
       "__uuid__": "cddbf90d-105c-465f-9e48-3e208a507c08",
       "__expectedType__": "cc.Prefab"
     },
+    "prefabRadius": 25,
+    "settingEggCount": 11,
+    "canvas": null,
     "collider": {
       "__id__": 4
     },
@@ -156,6 +162,40 @@
     "fileId": "27vEK6Ia9NbqyvqJm+8VZ1"
   },
   {
+    "__type__": "cc.RigidBody2D",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": false,
+    "__prefab": {
+      "__id__": 9
+    },
+    "enabledContactListener": true,
+    "bullet": false,
+    "awakeOnLoad": true,
+    "_group": 1,
+    "_type": 0,
+    "_allowSleep": true,
+    "_gravityScale": 1,
+    "_linearDamping": 0,
+    "_angularDamping": 0,
+    "_linearVelocity": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": 0
+    },
+    "_angularVelocity": 0,
+    "_fixedRotation": false,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "c0dvV+Ot1IaZZNBqDKhKUF"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -164,7 +204,6 @@
       "__id__": 0
     },
     "fileId": "43SqWV4nRAqrMiTTS8zm/A",
-    "instance": null,
-    "targetOverrides": null
+    "targetOverrides": []
   }
 ]
