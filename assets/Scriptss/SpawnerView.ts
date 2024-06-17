@@ -87,9 +87,9 @@ export class SpawnerView extends Component {
             let egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(bean, true)
             egg.node.name += ' ' + i + ' ' + bean.type
-            const eggSize = this.node.getComponent(UITransform).width
+            const spawnerSize = this.node.getComponent(UITransform).width
             egg.node.position.set(
-                -eggSize / 2 + (this.prefabRadius + i * 50) + distanceX + 2.5,
+                -spawnerSize / 2 + (this.prefabRadius + i * 50) + distanceX + 2.5,
                 this.node.position.y + this.prefabRadius - distanceY
             )
             this.canvas.addChild(egg.node)
