@@ -1,27 +1,70 @@
-import { _decorator, Component, EventMouse, Input, input, Node, RigidBody2D, UITransform, Vec2, Vec3 } from 'cc'
+import {
+    _decorator,
+    Component,
+    EventMouse,
+    Input,
+    instantiate,
+    Prefab,
+    resources,
+    RigidBody2D,
+    UITransform,
+    Vec2,
+    Vec3,
+} from 'cc'
+import { EggBean } from './Bean/EggBean'
+import { EggView } from './Gameobject/EggView'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
 export class SlingShotController extends Component {
+    @property({
+        type: Prefab,
+    })
+    public eggPrefeb: EggView
+
     @property({ type: UITransform })
     canvas: UITransform
 
     @property({ type: RigidBody2D })
     egg: RigidBody2D
 
-    speed = 0
-    start() {
-        input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
-        input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
+    power = 30
+
+    private beanList: Array<EggBean>
+
+    public doInit() {
+        resources.load('Data/EggData', (err, asset: any) => {
+            if (err) console.error(err)
+            else {
+                this.beanList = asset.json
+                this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
+                this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
+                this.spawnEgg()
+            }
+        })
+    }
+
+    private spawnEgg() {
+        var randomNumber = Math.floor(Math.random() * this.beanList.length)
+        let egg: EggView = instantiate(this.eggPrefeb).getComponent(EggView)
+        egg.doInit(this.beanList[randomNumber], false)
+        this.egg = egg.rb
+        this.canvas.node.addChild(egg.node)
+        this.egg.node.position = this.node.position
     }
 
     update(deltaTime: number) {}
 
     private onMouseDown(event: EventMouse) {
         if (this.egg == undefined) return
+    }
 
-        this.egg.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), 10)
-        // this.ball = undefined
+    private onMouseUp(event: EventMouse) {
+        if (this.egg == undefined) return
+        this.egg.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), this.power)
+        this.egg = undefined
+
+        setTimeout(() => this.spawnEgg(), 1000)
     }
 
     private getDirectionformBall(event: EventMouse): any {
@@ -31,12 +74,9 @@ export class SlingShotController extends Component {
         ).normalize()
     }
 
-    private onMouseUp(event: EventMouse) {
-        // console.log(this.getMousePositionInCanvas(event))
-    }
-
     private getMousePositionInCanvas(event: EventMouse): Vec2 {
         var position = new Vec2()
+
         position.x = event.getUILocationX() - this.canvas.width / 2
         position.y = event.getUILocationY() - this.canvas.height / 2
 

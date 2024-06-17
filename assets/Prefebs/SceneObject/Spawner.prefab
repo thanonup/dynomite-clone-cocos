@@ -25,15 +25,18 @@
       },
       {
         "__id__": 4
+      },
+      {
+        "__id__": 6
       }
     ],
     "_prefab": {
-      "__id__": 6
+      "__id__": 8
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 0,
+      "x": -287.5,
+      "y": 580,
       "z": 0
     },
     "_lrot": {
@@ -73,13 +76,13 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 520,
-      "height": 1000
+      "width": 25,
+      "height": 25
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.2
+      "y": 0.5
     },
     "_id": ""
   },
@@ -99,28 +102,63 @@
     "__prefab": {
       "__id__": 5
     },
-    "eggPrefeb": {
+    "eggPrefab": {
       "__uuid__": "cddbf90d-105c-465f-9e48-3e208a507c08",
       "__expectedType__": "cc.Prefab"
     },
-    "eggPrefebGroup": {
-      "__uuid__": "59d620aa-498a-4838-832a-38fc06e4f397",
-      "__expectedType__": "cc.Prefab"
-    },
+    "prefabRadius": 25,
     "spawnerObject": {
       "__id__": 1
     },
-    "settingEggCountXY": {
-      "__type__": "cc.Vec2",
-      "x": 10,
-      "y": 15
+    "settingEggCount": 11,
+    "canvas": null,
+    "collider": {
+      "__id__": 6
     },
-    "speedMove": 5,
+    "offset": {
+      "__type__": "cc.Vec2",
+      "x": 25,
+      "y": 43
+    },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "bcs25lrcZDXLrt47tDP6+M"
+  },
+  {
+    "__type__": "cc.BoxCollider2D",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 7
+    },
+    "tag": 0,
+    "_group": 1,
+    "_density": 1,
+    "_sensor": false,
+    "_friction": 0.2,
+    "_restitution": 0,
+    "_offset": {
+      "__type__": "cc.Vec2",
+      "x": 287.5,
+      "y": 0
+    },
+    "_size": {
+      "__type__": "cc.Size",
+      "width": 600,
+      "height": 50
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "c5gVRGGEtCS6KcHLmCs0Tc"
   },
   {
     "__type__": "cc.PrefabInfo",

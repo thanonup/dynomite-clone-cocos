@@ -1,19 +1,14 @@
 import {
     _decorator,
+    BoxCollider2D,
     CCFloat,
     Component,
+    Contact2DType,
     instantiate,
-    JsonAsset,
-    Layout,
-    loader,
     Node,
     Prefab,
     resources,
-    SpriteFrame,
-    tween,
-    UITransform,
     Vec2,
-    Vec3,
 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { GameplayPod } from './Pods/GameplayPod'
@@ -24,36 +19,39 @@ const { ccclass, property } = _decorator
 
 @ccclass('SpawnerView')
 export class SpawnerView extends Component {
-    public static readonly POSITION_SPAWN: number = 20
+    // public static readonly POSITION_SPAWN: number = 20
 
     @property({
         type: Prefab,
     })
-    public eggPrefeb: EggView
-
-    @property({
-        type: Prefab,
-    })
-    public eggPrefebGroup
-
-    @property({
-        type: Node,
-    })
-    public spawnerObject
-
-    @property({
-        type: Vec2,
-    })
-    public settingEggCountXY: Vec2
+    private eggPrefab: EggView
 
     @property({
         type: CCFloat,
     })
-    public speedMove: number
+    private prefabRadius: number
+
+    @property({
+        type: Node,
+    })
+    private spawnerObject
+
+    @property({ type: CCFloat })
+    private settingEggCount: number
+
+    @property({ type: Node })
+    private canvas: Node
+
+    @property({ type: BoxCollider2D })
+    private collider: BoxCollider2D
+
+    @property({ type: Vec2 })
+    private offset: Vec2
+
+    @property({ type: CCFloat })
+    speed: number
 
     private heightSize: number
-    private currentSpeed: number
-    private eggGroup = []
     private gameplayPod: GameplayPod
 
     private beanList: Array<EggBean>
@@ -64,51 +62,42 @@ export class SpawnerView extends Component {
 
         await resources.load('Data/EggData', (err, asset: any) => {
             if (err) console.log(err)
-            else this.beanList = asset.json
-        })
+            else {
+                this.beanList = asset.json
 
-        this.spawnEggGroup(100)
+                for (let i = 0; i < 10; i++) {
+                    if (i % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, i * this.offset.y)
+                    else this.spawnEggGroup(this.settingEggCount, this.offset.x, i * this.offset.y)
+                }
+            }
+        })
     }
 
-    private spawnEggGroup(yPostion: number) {
-        const countAll = this.settingEggCountXY.x * this.settingEggCountXY.y
-        const eggGroup = instantiate(this.eggPrefebGroup)
-        eggGroup.setPosition(new Vec3(0, yPostion, 0))
-        eggGroup.mobility = 2
-        this.spawnerObject.addChild(eggGroup)
-        this.eggGroup.push(eggGroup)
-
-        const layout: Layout = eggGroup.getComponent(Layout)
-        layout.constraintNum = this.settingEggCountXY.x
-        layout.enabled = true
-
+    private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number) {
         for (let i = 0; i < countAll; i++) {
             var randomNumber = Math.floor(Math.random() * this.beanList.length)
-            let egg = instantiate(this.eggPrefeb)
-            egg.getComponent(EggView).doInit(this.beanList[randomNumber], true)
-            eggGroup.addChild(egg)
+            var bean = this.beanList[randomNumber]
+            let egg = instantiate(this.eggPrefab).getComponent(EggView)
+            egg.doInit(bean, true)
+            egg.node.name += ' ' + i + ' ' + bean.type
+            egg.node.position.set(
+                this.node.position.x + (this.prefabRadius + i * 50) + distanceX,
+                this.node.position.y + this.prefabRadius - distanceY
+            )
+            this.canvas.addChild(egg.node)
         }
-
-        this.scheduleOnce(() => {
-            console.log('turn off grid layouts')
-            layout.enabled = false
-        }, 0.2)
-
-        this.heightSize = eggGroup.getComponent(UITransform).height
     }
 
+    private timer: number = 0
+    private count: number = 0
     update(deltaTime: number) {
-        if (this.gameplayPod.gameState == GameplayState.GameOver) return
-
-        this.currentSpeed = this.speedMove * deltaTime
-        this.eggGroup.forEach((x: Node) => {
-            x.setPosition(0, x.position.y - 1 * this.currentSpeed, 0)
-        })
-
-        if (this.eggGroup[this.eggGroup.length - 1] != undefined) {
-            if (this.eggGroup[this.eggGroup.length - 1].position.y < SpawnerView.POSITION_SPAWN) {
-                this.spawnEggGroup(this.heightSize + SpawnerView.POSITION_SPAWN)
-            }
+        this.timer += deltaTime * this.speed
+        if (this.timer >= this.offset.y) {
+            this.timer = 0
+            console.log('spawn')
+            if (this.count % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, 0)
+            else this.spawnEggGroup(this.settingEggCount, this.offset.x, 0)
+            this.count++
         }
     }
 }

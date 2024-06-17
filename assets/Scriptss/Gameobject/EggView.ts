@@ -11,11 +11,10 @@ import {
     UITransform,
     Vec2,
     Vec3,
-    EventTarget,
     resources,
     SpriteFrame,
-    math,
     ImageAsset,
+    CCFloat,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -28,7 +27,7 @@ export class EggView extends Component {
     @property
     collider: CircleCollider2D
     @property
-    rb: RigidBody2D
+    public rb: RigidBody2D
     @property
     positionRef: Vec2
     @property({ type: CCBoolean })
@@ -36,19 +35,22 @@ export class EggView extends Component {
     @property({ type: CCBoolean })
     isFalling: boolean
 
+    @property({
+        type: CCFloat,
+    })
+    public speedMove: number
+
+    @property({ type: EggPod })
     public eggPod: EggPod
 
     isCollided: boolean = false
     targetPosition: Vec3
 
-    start() {
-        // this.doInit()
-    }
-
     public doInit(bean: EggBean, isGrid: boolean) {
         this.isOnGrid = isGrid
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
+        this.eggPod.eggListInType.push(this)
         this.eggPod.ChangeBean(bean)
 
         this.loadImage(bean)
@@ -71,14 +73,16 @@ export class EggView extends Component {
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
 
-            // Check is Already in list
+            // check is Already in list
             if (!this.eggPod.eggList.find((x) => x == eggView)) {
-                //Add new egg to list for all element in list
-                this.eggPod.eggList.forEach((eggElement) => {
-                    eggView.eggPod.eggList.forEach((egg) => {
-                        if (!eggElement.eggPod.eggList.find((x) => x == egg)) eggElement.eggPod.eggList.push(egg)
-                    })
-                })
+                //add new egg at list for all element in list
+                this.eggPod.addEggToEggList(eggView)
+
+                //add new same type egg at list
+            }
+
+            if (eggView.eggPod.bean.type == this.eggPod.bean.type) {
+                if (!this.eggPod.eggListInType.find((x) => x == eggView)) this.eggPod.addEggToEggListInType(eggView)
             }
         }
 
@@ -92,6 +96,10 @@ export class EggView extends Component {
         this.targetPosition = this.getGridPosition(selfCollider, otherCollider)
         this.isCollided = true
         this.isOnGrid = true
+
+        if (this.eggPod.eggListInType.length > 2) {
+            this.eggPod.eggListInType.forEach((x) => x.node.destroy())
+        }
     }
 
     private getGridPosition(selfCollider: Collider2D, otherCollider: Collider2D): Vec3 {
@@ -124,6 +132,31 @@ export class EggView extends Component {
                 )
         }
 
+        // console.log(this.node.getPosition().y)
+        // console.log(otherCollider.node.getPosition().y - otherCollider.node.getComponent(UITransform).height / 2)
+        // console.log(otherCollider.node.getPosition().y)
+
+        // if (
+        //     selfCollider.node.position.y <
+        //     otherCollider.node.position.y - otherCollider.node.getComponent(UITransform).height / 2
+        // ) {
+        //     vec = new Vec3(
+        //         otherCollider.node.position.x,
+        //         otherCollider.node.position.y - otherCollider.node.getComponent(UITransform).height
+        //     )
+        // } else {
+        //     if (selfCollider.node.position.x < otherCollider.node.position.x)
+        //         vec = new Vec3(
+        //             otherCollider.node.position.x - otherCollider.node.getComponent(UITransform).width,
+        //             otherCollider.node.position.y
+        //         )
+        //     else
+        //         vec = new Vec3(
+        //             otherCollider.node.position.x + otherCollider.node.getComponent(UITransform).width,
+        //             otherCollider.node.position.y
+        //         )
+        // }
+
         return vec
     }
 
@@ -135,6 +168,17 @@ export class EggView extends Component {
 
         this.collider.sensor = this.isOnGrid
 
-        if (this.isOnGrid) return
+        if (this.isOnGrid) {
+            var yPosition = this.node.position.y - this.speedMove * deltaTime
+            this.node.setPosition(this.node.position.x, yPosition, 0)
+            // this.node.setPosition(this.node.position.x, this.node.position.y, 0)
+
+            return
+        }
+    }
+
+    public onDestroy() {
+        this.eggPod.removeEggFromEggList(this)
+        this.eggPod = undefined
     }
 }
