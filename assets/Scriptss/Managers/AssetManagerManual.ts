@@ -35,8 +35,6 @@ export class AssetManagerManual {
                     if (index == assets.length - 1) resolve('done')
                 })
             })
-            console.log('--- cache data ---')
-            console.log(this.assetSpriteFrameCache.length)
         })
     }
 

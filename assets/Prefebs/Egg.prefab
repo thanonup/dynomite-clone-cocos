@@ -717,21 +717,20 @@
     "__prefab": {
       "__id__": 27
     },
+    "rb": {
+      "__id__": 22
+    },
     "eggSprite": {
       "__id__": 20
     },
     "collider": {
       "__id__": 24
     },
-    "rb": {
-      "__id__": 22
-    },
     "positionRef": {
       "__type__": "cc.Vec2",
       "x": 25,
       "y": 43
     },
-    "speedMove": 20,
     "_id": ""
   },
   {

@@ -8,6 +8,7 @@ import {
     Node,
     Prefab,
     resources,
+    UITransform,
     Vec2,
 } from 'cc'
 import { EggView } from './Gameobject/EggView'
@@ -51,10 +52,12 @@ export class SpawnerView extends Component {
     @property({ type: CCFloat })
     startGameSpeed: number
 
-    private heightSize: number
     private gameplayPod: GameplayPod
-
     private beanList: Array<EggBean>
+
+    private heightSize: number
+    private timer: number = 0
+    private count: number = 0
 
     public async doInit() {
         console.log('Init Spawner')
@@ -81,23 +84,21 @@ export class SpawnerView extends Component {
             let egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(bean, true)
             egg.node.name += ' ' + i + ' ' + bean.type
+            const eggSize = this.node.getComponent(UITransform).width
             egg.node.position.set(
-                this.node.position.x + (this.prefabRadius + i * 50) + distanceX,
+                -eggSize / 2 + (this.prefabRadius + i * 50) + distanceX + 2.5,
                 this.node.position.y + this.prefabRadius - distanceY
             )
             this.canvas.addChild(egg.node)
         }
     }
 
-    private timer: number = 0
-    private count: number = 0
     update(deltaTime: number) {
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0
-            console.log('spawn')
-            if (this.count % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, 0)
-            else this.spawnEggGroup(this.settingEggCount, this.offset.x, 0)
+            if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggCount, 0, -1.5)
+            else this.spawnEggGroup(this.settingEggCount, this.offset.x, -2)
             this.count++
         }
     }
