@@ -51,6 +51,8 @@ export class SpawnerView extends Component {
     @property({ type: CCFloat })
     startGameSpeed: number
 
+    isLoaded: boolean = false
+
     private heightSize: number
     private gameplayPod: GameplayPod
 
@@ -70,6 +72,8 @@ export class SpawnerView extends Component {
                     if (i % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, i * this.offset.y)
                     else this.spawnEggGroup(this.settingEggCount, this.offset.x, i * this.offset.y)
                 }
+
+                this.isLoaded = true
             }
         })
     }
@@ -92,10 +96,11 @@ export class SpawnerView extends Component {
     private timer: number = 0
     private count: number = 0
     update(deltaTime: number) {
+        if (!this.isLoaded) return
+
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0
-            console.log('spawn')
             if (this.count % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, 0)
             else this.spawnEggGroup(this.settingEggCount, this.offset.x, 0)
             this.count++

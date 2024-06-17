@@ -726,11 +726,7 @@
     "rb": {
       "__id__": 22
     },
-    "positionRef": {
-      "__type__": "cc.Vec2",
-      "x": 25,
-      "y": 43
-    },
+    "yOffset": 43,
     "speedMove": 20,
     "_id": ""
   },

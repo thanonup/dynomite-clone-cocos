@@ -26,6 +26,15 @@ const { ccclass, property } = _decorator
 export class EggView extends Component {
     @property
     public rb: RigidBody2D
+    @property({ type: CCFloat })
+    yOffset: number
+    @property({ type: CCBoolean })
+    isOnGrid: boolean
+    @property({ type: CCBoolean })
+    isFalling: boolean
+    @property({ type: CCBoolean })
+    isBullet: boolean
+
     @property({ type: EggPod })
     public eggPod: EggPod
 
@@ -33,12 +42,6 @@ export class EggView extends Component {
     private eggSprite: Sprite
     @property
     private collider: CircleCollider2D
-    @property
-    private positionRef: Vec2
-    @property({ type: CCBoolean })
-    private isOnGrid: boolean
-    @property({ type: CCBoolean })
-    private isFalling: boolean
 
     private speedMove: number
     private isCollided: boolean = false
@@ -46,15 +49,19 @@ export class EggView extends Component {
 
     private gameplayPod: GameplayPod
 
+    uiTransform: UITransform
+
     public doInit(bean: EggBean, isGrid: boolean) {
         this.gameplayPod = GameplayPod.instance
 
+        this.uiTransform = this.getComponent(UITransform)
         this.isOnGrid = isGrid
+        this.isBullet = !isGrid
         this.eggPod = new EggPod()
         this.eggPod.eggList.push(this)
         this.eggPod.eggListInType.push(this)
 
-        this.eggPod.beanEventTarget.on('Change', (bean: EggBean) => {
+        this.eggPod.eventTarget.on('BeanChange', (bean: EggBean) => {
             this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
         })
 
@@ -65,35 +72,16 @@ export class EggView extends Component {
 
         this.eggPod.ChangeBean(bean)
 
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
-    }
-
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        if (otherCollider.tag == selfCollider.tag) {
-            var eggView = otherCollider.getComponent(EggView)
-
-            // check is Already in list
-            if (!this.eggPod.eggList.find((x) => x == eggView)) {
-                //add new egg at list for all element in list
-                this.eggPod.addEggToEggList(eggView)
-
-                //add new same type egg at list
-            }
-
-            if (eggView.eggPod.bean.type == this.eggPod.bean.type) {
-                if (!this.eggPod.eggListInType.find((x) => x == eggView)) this.eggPod.addEggToEggListInType(eggView)
-            }
-        }
-
-        if (!this.isOnGrid) {
-            if (otherCollider.tag == selfCollider.tag) this.OnEggCollision(selfCollider, otherCollider)
-        }
+        this.collider.on(Contact2DType.POST_SOLVE, this.onBeginContact, this)
     }
 
     private OnEggCollision(selfCollider: Collider2D, otherCollider: Collider2D) {
+        if (!this.isOnGrid) {
+            this.targetPosition = this.getGridPosition(selfCollider, otherCollider)
+            this.isCollided = true
+        }
+
         this.rb.linearVelocity = new Vec2()
-        this.targetPosition = this.getGridPosition(selfCollider, otherCollider)
-        this.isCollided = true
         this.isOnGrid = true
 
         if (this.eggPod.eggListInType.length > 2) {
@@ -110,25 +98,18 @@ export class EggView extends Component {
         ) {
             if (selfCollider.node.position.x < otherCollider.node.position.x)
                 vec = new Vec3(
-                    otherCollider.node.position.x - this.positionRef.x,
-                    otherCollider.node.position.y - this.positionRef.y
+                    otherCollider.node.position.x - this.uiTransform.width / 2,
+                    otherCollider.node.position.y - this.yOffset
                 )
             else
                 vec = new Vec3(
-                    otherCollider.node.position.x + this.positionRef.x,
-                    otherCollider.node.position.y - this.positionRef.y
+                    otherCollider.node.position.x + this.uiTransform.width / 2,
+                    otherCollider.node.position.y - this.yOffset
                 )
         } else {
             if (selfCollider.node.position.x < otherCollider.node.position.x)
-                vec = new Vec3(
-                    otherCollider.node.position.x - otherCollider.getComponent(UITransform).width,
-                    otherCollider.node.position.y
-                )
-            else
-                vec = new Vec3(
-                    otherCollider.node.position.x + otherCollider.getComponent(UITransform).width,
-                    otherCollider.node.position.y
-                )
+                vec = new Vec3(otherCollider.node.position.x - this.uiTransform.width, otherCollider.node.position.y)
+            else vec = new Vec3(otherCollider.node.position.x + this.uiTransform.width, otherCollider.node.position.y)
         }
 
         return vec
@@ -145,7 +126,6 @@ export class EggView extends Component {
         if (this.isOnGrid) {
             var yPosition = this.node.position.y - this.speedMove * deltaTime
             this.node.setPosition(this.node.position.x, yPosition, 0)
-            // this.node.setPosition(this.node.position.x, this.node.position.y, 0)
 
             return
         }
@@ -154,5 +134,27 @@ export class EggView extends Component {
     public onDestroy() {
         this.eggPod.removeEggFromEggList(this)
         this.eggPod = undefined
+    }
+
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        console.log('test')
+        if (otherCollider.tag == selfCollider.tag) {
+            var eggView = otherCollider.getComponent(EggView)
+
+            // check is already in list
+            if (!this.eggPod.eggList.find((x) => x == eggView)) {
+                //add new egg at list for all element in list
+                this.eggPod.addEggToEggList(eggView)
+            }
+
+            //add new same type egg at list
+            if (eggView.eggPod.bean.type == this.eggPod.bean.type) {
+                if (!this.eggPod.eggListInType.find((x) => x == eggView)) this.eggPod.addEggToEggListInType(eggView)
+            }
+        }
+
+        if (this.isBullet) {
+            if (otherCollider.tag == selfCollider.tag) this.OnEggCollision(selfCollider, otherCollider)
+        }
     }
 }
