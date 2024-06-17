@@ -72,7 +72,7 @@ export class EggView extends Component {
 
         this.eggPod.ChangeBean(bean)
 
-        this.collider.on(Contact2DType.POST_SOLVE, this.onBeginContact, this)
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
     }
 
     private OnEggCollision(selfCollider: Collider2D, otherCollider: Collider2D) {
