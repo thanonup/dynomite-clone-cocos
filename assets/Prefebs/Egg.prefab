@@ -720,16 +720,12 @@
     "rb": {
       "__id__": 22
     },
+    "yOffset": 43,
     "eggSprite": {
       "__id__": 20
     },
     "collider": {
       "__id__": 24
-    },
-    "positionRef": {
-      "__type__": "cc.Vec2",
-      "x": 25,
-      "y": 43
     },
     "_id": ""
   },
