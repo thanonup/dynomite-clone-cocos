@@ -226,9 +226,9 @@
       "b": 255,
       "a": 255
     },
-    "duration": 1,
+    "duration": 0.5,
     "emissionRate": 10,
-    "life": 2,
+    "life": 0.5,
     "lifeVar": 0,
     "angle": 90,
     "angleVar": 20,
@@ -428,9 +428,9 @@
       "b": 255,
       "a": 255
     },
-    "duration": 3,
+    "duration": 0.5,
     "emissionRate": 10,
-    "life": 2,
+    "life": 0.5,
     "lifeVar": 0,
     "angle": 90,
     "angleVar": 20,

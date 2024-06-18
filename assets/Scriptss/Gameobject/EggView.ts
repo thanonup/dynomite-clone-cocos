@@ -146,7 +146,7 @@ export class EggView extends Component {
 
         this.scheduleOnce(() => {
             this.node.destroy()
-        }, 3)
+        }, 0.3)
     }
 
     public onDestroy() {
