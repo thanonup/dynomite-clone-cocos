@@ -36,8 +36,8 @@ export class SpawnerView extends Component {
     })
     private spawnerObject
 
-    @property({ type: CCFloat })
-    private settingEggCount: number
+    @property({ type: Vec2 })
+    private settingEggRowAndColumn: Vec2
 
     @property({ type: Node })
     private canvas: Node
@@ -70,9 +70,9 @@ export class SpawnerView extends Component {
             else {
                 this.beanList = asset.json
 
-                for (let i = 0; i < 10; i++) {
-                    if (i % 2 == 0) this.spawnEggGroup(this.settingEggCount, 0, i * this.offset.y)
-                    else this.spawnEggGroup(this.settingEggCount, this.offset.x, i * this.offset.y)
+                for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
+                    if (i % 2 == 0) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
+                    else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
                 }
 
                 this.isLoaded = true
@@ -102,8 +102,8 @@ export class SpawnerView extends Component {
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0
-            if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggCount, 0, -1.5)
-            else this.spawnEggGroup(this.settingEggCount, this.offset.x, -2)
+            if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, -1.5)
+            else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, -2)
             this.count++
         }
     }
