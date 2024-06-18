@@ -155,7 +155,7 @@ export class EggView extends Component {
         this.rb.gravityScale = 1
 
         this.scheduleOnce(() => {
-            this.rb.linearVelocity = new Vec2(0, -15)
+            this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)
         }, 0.3)
 
         this.scheduleOnce(() => {
@@ -187,5 +187,9 @@ export class EggView extends Component {
 
             if (this.isBullet) this.OnEggCollision(selfCollider, otherCollider)
         }
+    }
+
+    randomIntFromRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
 }
