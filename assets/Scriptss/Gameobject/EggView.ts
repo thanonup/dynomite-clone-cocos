@@ -18,6 +18,8 @@ import {
     PhysicsSystem2D,
     ERaycast2DType,
     Input,
+    ParticleSystem2D,
+    tween,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -46,9 +48,15 @@ export class EggView extends Component {
     @property
     private collider: CircleCollider2D
 
+    @property({ type: ParticleSystem2D })
+    private particleBomb1: ParticleSystem2D
+    @property({ type: ParticleSystem2D })
+    private particleBomb2: ParticleSystem2D
+
     private speedMove: number
     private isCollided: boolean = false
     private targetPosition: Vec3
+    private isDestorying: boolean = false
 
     private gameplayPod: GameplayPod
 
@@ -104,6 +112,7 @@ export class EggView extends Component {
     }
 
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        console.log('test')
         if (otherCollider.tag == 30) {
             this.canFall = true
         }
@@ -111,7 +120,7 @@ export class EggView extends Component {
 
     private onClick(event: MouseEvent) {
         this.eggPod.eggList.forEach((x) => {
-            console.log(x.name)
+            if (x.canFall == false) console.log(x.name)
         })
     }
 
@@ -121,12 +130,16 @@ export class EggView extends Component {
             this.isCollided = true
         }
 
-        this.rb.linearVelocity = new Vec2()
+        this.rb.linearVelocity = new Vec2(0, 0)
         this.isOnGrid = true
 
         this.scheduleOnce(() => {
             if (this.eggPod.eggListInType.length > 2) {
-                this.eggPod.eggListInType.forEach((x) => x.onDestroy())
+                this.eggPod.eggListInType.forEach((x) => {
+                    x.onBeforeDestory()
+                    x.onDestroy()
+                })
+
                 this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
             }
             this.isBullet = false
@@ -160,24 +173,42 @@ export class EggView extends Component {
     }
 
     update(deltaTime: number) {
-        if (this.collider.radius < 25) {
-            this.collider.radius = this.collider.radius + 1
-        }
+        if (!this.isDestorying) {
+            if (this.isCollided) {
+                this.node.setPosition(this.targetPosition)
+                this.isCollided = false
+            }
 
-        if (this.isCollided) {
-            this.node.setPosition(this.targetPosition)
-            this.isCollided = false
-        }
+            if (this.isOnGrid) {
+                var yPosition = this.node.position.y - this.speedMove * deltaTime
+                this.node.setPosition(this.node.position.x, yPosition, 0)
 
-        this.collider.sensor = this.isOnGrid
-
-        if (this.isOnGrid) {
-            var yPosition = this.node.position.y - this.speedMove * deltaTime
-            this.node.setPosition(this.node.position.x, yPosition, 0)
+                return
+            }
         }
     }
 
+    public onBeforeDestory() {
+        this.particleBomb1.resetSystem()
+        this.particleBomb2.resetSystem()
+
+        this.isDestorying = true
+        this.collider.enabled = false
+        this.rb.linearVelocity = new Vec2(0, 5)
+        this.collider.sensor = true
+        this.rb.gravityScale = 1
+
+        this.scheduleOnce(() => {
+            this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)
+        }, 0.3)
+
+        this.scheduleOnce(() => {
+            this.node.destroy()
+        }, 3)
+    }
+
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        console.log('test')
         if (otherCollider.tag == 30) {
             this.canFall = false
         }
@@ -186,6 +217,16 @@ export class EggView extends Component {
     }
 
     private handleEggContact(otherCollider: Collider2D, selfCollider: Collider2D) {
+        if (this.isDestorying) return
+
+        if (this.isBullet) {
+            if (otherCollider.tag == 222) {
+                var vec = this.rb.linearVelocity
+                vec.x *= -1
+                this.rb.linearVelocity = vec
+            }
+        }
+
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
 
@@ -207,5 +248,9 @@ export class EggView extends Component {
     public onDestroy() {
         this.node.active = false
         this.eggPod.removeEggFromEggList(this)
+    }
+
+    randomIntFromRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
 }
