@@ -10,8 +10,13 @@ export class EggPod {
 
     public bean: EggBean
     public eventTarget = new EventTarget()
+    public eggView: EggView
 
-    constructor() {
+    constructor(eggView: EggView) {
+        this.eggView = eggView
+        this.eggList.push(eggView)
+        this.eggListInType.push(eggView)
+
         this.eventTarget.on(
             'BeanChange',
             (bean: EggBean) => {
@@ -52,6 +57,14 @@ export class EggPod {
         this.eggList.forEach((eggElement) => {
             if (eggElement != eggView) eggElement.eggPod.onRemoveEggFromEggList(eggView)
         })
+    }
+
+    public resetList() {
+        this.eggList = new Array<EggView>()
+        this.eggList.push(this.eggView)
+
+        this.eggListInType = new Array<EggView>()
+        this.eggListInType.push(this.eggView)
     }
 
     public onRemoveEggFromEggList(eggView: EggView) {

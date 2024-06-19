@@ -15,6 +15,9 @@ import {
     SpriteFrame,
     ImageAsset,
     CCFloat,
+    PhysicsSystem2D,
+    ERaycast2DType,
+    Input,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -31,7 +34,7 @@ export class EggView extends Component {
     @property({ type: CCBoolean })
     isOnGrid: boolean
     @property({ type: CCBoolean })
-    isFalling: boolean
+    public canFall: boolean = true
     @property({ type: CCBoolean })
     isBullet: boolean
 
@@ -57,13 +60,35 @@ export class EggView extends Component {
         this.uiTransform = this.getComponent(UITransform)
         this.isOnGrid = isGrid
         this.isBullet = !isGrid
-        this.eggPod = new EggPod()
-        this.eggPod.eggList.push(this)
-        this.eggPod.eggListInType.push(this)
+        this.eggPod = new EggPod(this)
 
         this.eggPod.eventTarget.on('BeanChange', (bean: EggBean) => {
             this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
         })
+
+        this.gameplayPod.gameplayPodEventTarget.on(
+            'updateCollision',
+            () => {
+                this.eggPod.resetList()
+                this.collider.enabled = false
+                this.scheduleOnce(() => {
+                    this.collider.enabled = true
+                    this.rb.allowSleep = false
+                }, 0.001)
+
+                this.scheduleOnce(() => {
+                    var falling = true
+                    this.eggPod.eggList.forEach((x) => {
+                        if (!x.canFall) {
+                            falling = false
+                        }
+                    })
+
+                    if (falling) this.onDestroy()
+                }, 0.05)
+            },
+            this
+        )
 
         this.speedMove = this.gameplayPod.gameSpeed
         this.gameplayPod.gameplayPodEventTarget.on('gameSpeed', (speed: number) => {
@@ -73,6 +98,21 @@ export class EggView extends Component {
         this.eggPod.ChangeBean(bean)
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+        this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+
+        this.node.on(Input.EventType.MOUSE_DOWN, this.onClick, this)
+    }
+
+    private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        if (otherCollider.tag == 30) {
+            this.canFall = true
+        }
+    }
+
+    private onClick(event: MouseEvent) {
+        this.eggPod.eggList.forEach((x) => {
+            console.log(x.name)
+        })
     }
 
     private OnEggCollision(selfCollider: Collider2D, otherCollider: Collider2D) {
@@ -84,9 +124,13 @@ export class EggView extends Component {
         this.rb.linearVelocity = new Vec2()
         this.isOnGrid = true
 
-        if (this.eggPod.eggListInType.length > 2) {
-            this.eggPod.eggListInType.forEach((x) => x.node.destroy())
-        }
+        this.scheduleOnce(() => {
+            if (this.eggPod.eggListInType.length > 2) {
+                this.eggPod.eggListInType.forEach((x) => x.onDestroy())
+                this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
+            }
+            this.isBullet = false
+        }, 0.05)
     }
 
     private getGridPosition(selfCollider: Collider2D, otherCollider: Collider2D): Vec3 {
@@ -116,6 +160,10 @@ export class EggView extends Component {
     }
 
     update(deltaTime: number) {
+        if (this.collider.radius < 25) {
+            this.collider.radius = this.collider.radius + 1
+        }
+
         if (this.isCollided) {
             this.node.setPosition(this.targetPosition)
             this.isCollided = false
@@ -126,17 +174,18 @@ export class EggView extends Component {
         if (this.isOnGrid) {
             var yPosition = this.node.position.y - this.speedMove * deltaTime
             this.node.setPosition(this.node.position.x, yPosition, 0)
-
-            return
         }
     }
 
-    public onDestroy() {
-        this.eggPod.removeEggFromEggList(this)
-        this.eggPod = undefined
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        if (otherCollider.tag == 30) {
+            this.canFall = false
+        }
+
+        this.handleEggContact(otherCollider, selfCollider)
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+    private handleEggContact(otherCollider: Collider2D, selfCollider: Collider2D) {
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
 
@@ -153,5 +202,10 @@ export class EggView extends Component {
 
             if (this.isBullet) this.OnEggCollision(selfCollider, otherCollider)
         }
+    }
+
+    public onDestroy() {
+        this.node.active = false
+        this.eggPod.removeEggFromEggList(this)
     }
 }
