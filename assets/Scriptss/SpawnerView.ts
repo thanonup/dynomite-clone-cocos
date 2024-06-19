@@ -51,39 +51,27 @@ export class SpawnerView extends Component {
     @property({ type: CCFloat })
     startGameSpeed: number
 
-    isLoaded: boolean = false
-
     private gameplayPod: GameplayPod
-    private beanList: Array<EggBean>
 
     private heightSize: number
     private timer: number = 0
     private count: number = 0
 
-    public async doInit() {
+    public doInit() {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
         this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
 
-        await resources.load('Data/EggData', (err, asset: any) => {
-            if (err) console.log(err)
-            else {
-                this.beanList = asset.json
-
-                for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
-                    if (i % 2 == 0) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
-                    else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
-                }
-
-                this.isLoaded = true
-            }
-        })
+        for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
+            if (i % 2 == 0) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
+            else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
+        }
     }
 
     private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number) {
         for (let i = 0; i < countAll; i++) {
-            var randomNumber = Math.floor(Math.random() * this.beanList.length)
-            var bean = this.beanList[randomNumber]
+            var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
+            var bean = this.gameplayPod.beanEggDataList[randomNumber]
             let egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(bean, true)
             egg.node.name += ' ' + i + ' ' + bean.type
@@ -97,8 +85,6 @@ export class SpawnerView extends Component {
     }
 
     update(deltaTime: number) {
-        if (!this.isLoaded) return
-
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0

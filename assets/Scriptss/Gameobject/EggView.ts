@@ -73,7 +73,7 @@ export class EggView extends Component {
         this.eggPod = new EggPod(this)
 
         this.eggPod.eventTarget.on('BeanChange', (bean: EggBean) => {
-            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.instance.getAsset(bean.keySprite)
+            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.Instance.getAsset(bean.keySprite)
         })
 
         this.gameplayPod.gameplayPodEventTarget.on(
