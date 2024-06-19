@@ -4,6 +4,7 @@ import { GameOverView } from './Gameobject/GameOverView'
 import { SlingShotController } from './SlingShotController'
 import { GameplayPod } from './Pods/GameplayPod'
 import { AssetManagerManual } from './Managers/AssetManagerManual'
+import { ScoreUIView } from './ScoreUIView'
 const { ccclass, property } = _decorator
 
 @ccclass('GameInit')
@@ -17,6 +18,9 @@ export class GameInit extends Component {
         type: GameOverView,
     })
     public gameOverView: GameOverView
+
+    @property({ type: ScoreUIView })
+    public scoreUIView: ScoreUIView
 
     @property({ type: SlingShotController })
     public slingshotController: SlingShotController
@@ -40,6 +44,7 @@ export class GameInit extends Component {
         this.spawnerView.doInit()
         this.gameOverView.doInit()
         this.slingshotController.doInit()
+        this.scoreUIView.doInit()
     }
 
     private async loadEggData() {
