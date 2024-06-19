@@ -20,6 +20,8 @@ import {
     Input,
     ParticleSystem2D,
     tween,
+    quat,
+    math,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -172,6 +174,7 @@ export class EggView extends Component {
 
     update(deltaTime: number) {
         this.rb.angularVelocity = 0.001
+        this.node.setRotation(new math.Quat())
 
         if (!this.isDestorying) {
             if (this.isCollided) {
@@ -229,6 +232,7 @@ export class EggView extends Component {
 
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
+            if (eggView.isDestorying) return
 
             // check is already in list
             if (!this.eggPod.eggList.find((x) => x == eggView)) {
