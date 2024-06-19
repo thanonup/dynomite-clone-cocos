@@ -133,8 +133,6 @@ export class EggView extends Component {
                 this.isCollided = false
             }
 
-            this.collider.sensor = this.isOnGrid
-
             if (this.isOnGrid) {
                 var yPosition = this.node.position.y - this.speedMove * deltaTime
                 this.node.setPosition(this.node.position.x, yPosition, 0)
@@ -170,6 +168,15 @@ export class EggView extends Component {
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (this.isDestorying) return
+
+        if (this.isBullet) {
+            var vec = this.rb.linearVelocity
+            vec.x *= -1
+
+            if (otherCollider.tag == 222) {
+                this.rb.linearVelocity = vec
+            }
+        }
 
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
