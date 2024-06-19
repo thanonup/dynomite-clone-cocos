@@ -20,6 +20,10 @@ import {
     Input,
     ParticleSystem2D,
     tween,
+    quat,
+    math,
+    AudioSource,
+    AudioClip,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -52,6 +56,14 @@ export class EggView extends Component {
     private particleBomb1: ParticleSystem2D
     @property({ type: ParticleSystem2D })
     private particleBomb2: ParticleSystem2D
+
+    @property({ type: AudioSource })
+    private audio: AudioSource
+
+    @property({ type: AudioClip })
+    private contactClip
+    @property({ type: AudioClip })
+    private destroyClip
 
     private speedMove: number
     private isCollided: boolean = false
@@ -92,7 +104,7 @@ export class EggView extends Component {
                         }
                     })
 
-                    if (falling) this.onDestroy()
+                    if (falling) this.onBeforeDestory()
                 }, 0.05)
             },
             this
@@ -136,11 +148,12 @@ export class EggView extends Component {
             if (this.eggPod.eggListInType.length > 2) {
                 this.eggPod.eggListInType.forEach((x) => {
                     x.onBeforeDestory()
-                    x.onDestroy()
                 })
 
+                this.onAudioPlay(this.destroyClip)
                 this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
-            }
+            } else this.onAudioPlay(this.contactClip)
+
             this.isBullet = false
         }, 0.05)
     }
@@ -171,8 +184,15 @@ export class EggView extends Component {
         return vec
     }
 
+    private onAudioPlay(clip: AudioClip) {
+        this.audio.clip = clip
+        if (clip == this.destroyClip) this.audio.play()
+        else if (!this.audio.playing) this.audio.play()
+    }
+
     update(deltaTime: number) {
         this.rb.angularVelocity = 0.001
+        this.node.setRotation(new math.Quat())
 
         if (!this.isDestorying) {
             if (this.isCollided) {
@@ -204,12 +224,11 @@ export class EggView extends Component {
         }, 0.3)
 
         this.scheduleOnce(() => {
-            this.node.destroy()
+            this.onDestroy()
         }, 3)
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log('test')
         if (otherCollider.tag == 30) {
             this.canFall = false
         }
@@ -230,6 +249,7 @@ export class EggView extends Component {
 
         if (otherCollider.tag == selfCollider.tag) {
             var eggView = otherCollider.getComponent(EggView)
+            if (eggView.isDestorying) return
 
             // check is already in list
             if (!this.eggPod.eggList.find((x) => x == eggView)) {
