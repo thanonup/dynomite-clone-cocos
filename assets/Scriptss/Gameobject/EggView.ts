@@ -112,7 +112,6 @@ export class EggView extends Component {
     }
 
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log('test')
         if (otherCollider.tag == 30) {
             this.canFall = true
         }
@@ -120,7 +119,7 @@ export class EggView extends Component {
 
     private onClick(event: MouseEvent) {
         this.eggPod.eggList.forEach((x) => {
-            if (x.canFall == false) console.log(x.name)
+            console.log(x.name)
         })
     }
 
@@ -173,6 +172,8 @@ export class EggView extends Component {
     }
 
     update(deltaTime: number) {
+        this.rb.angularVelocity = 0.001
+
         if (!this.isDestorying) {
             if (this.isCollided) {
                 this.node.setPosition(this.targetPosition)
