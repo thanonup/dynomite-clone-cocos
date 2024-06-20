@@ -106,7 +106,6 @@ export class EggView extends Component {
                             falling = false
                         }
                     })
-
                     if (falling) this.onBeforeDestory()
                 }, 0.17)
             },
@@ -223,16 +222,6 @@ export class EggView extends Component {
         this.collider.enabled = false
         this.rb.linearVelocity = new Vec2(0, 5)
         this.rb.gravityScale = 1
-
-        // this.scheduleOnce(() => {
-        //     console.log('test4')
-        //     this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)
-        // }, 0.3)
-
-        // this.scheduleOnce(() => {
-        //     console.log('test3')
-        //     this.returnToPool()
-        // }, 3)
 
         setTimeout(() => (this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)), 300, this)
         setTimeout(() => this.returnToPool(), 3000, this)

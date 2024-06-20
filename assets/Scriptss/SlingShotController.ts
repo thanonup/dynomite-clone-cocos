@@ -14,6 +14,7 @@ import {
 import { EggBean } from './Bean/EggBean'
 import { EggView } from './Gameobject/EggView'
 import { SpawnerView } from './SpawnerView'
+import { GameplayPod } from './Pods/GameplayPod'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
@@ -34,24 +35,27 @@ export class SlingShotController extends Component {
 
     power = 30
 
-    private beanList: Array<EggBean>
+    private gameplayPod: GameplayPod
 
     public doInit() {
-        resources.load('Data/EggData', (err, asset: any) => {
-            if (err) console.error(err)
-            else {
-                this.beanList = asset.json
-                this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
-                this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
-                this.spawnEgg()
-            }
-        })
+        this.gameplayPod = GameplayPod.instance
+
+        this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
+        this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
+        this.spawnEgg()
     }
 
     private spawnEgg() {
-        var randomNumber = Math.floor(Math.random() * this.beanList.length)
+        const randomBean = this.gameplayPod.nextEggSpawnBean
+            ? this.gameplayPod.nextEggSpawnBean
+            : this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)]
+
+        this.gameplayPod.gameplayPodEventTarget.emit(
+            'nextEggSpawn',
+            this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)]
+        )
         this.egg = this.spawnerView.getFromPool().getComponent(EggView)
-        this.egg.eggPod.ChangeBean(this.beanList[randomNumber], false)
+        this.egg.eggPod.ChangeBean(randomBean, false)
         this.canvas.node.addChild(this.egg.node)
         this.egg.node.position = this.node.position
         this.egg.collider.enabled = false
