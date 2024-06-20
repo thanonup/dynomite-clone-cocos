@@ -59,6 +59,8 @@ export class SpawnerView extends Component {
     private timer: number = 0
     private count: number = 0
 
+    private isStart: boolean = false
+
     public pool = new NodePool()
 
     public doInit() {
@@ -135,9 +137,12 @@ export class SpawnerView extends Component {
         } else if (this.count == GameConfig.NEXT_SPAWN_NEW_EGG_2) {
             this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[4])
         }
+
+        this.isStart = true
     }
 
     update(deltaTime: number) {
+        if (!this.isStart) return
         this.timer += deltaTime * this.startGameSpeed
         if (this.timer >= this.offset.y) {
             this.timer = 0

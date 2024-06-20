@@ -101,7 +101,7 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 5
     },
@@ -113,12 +113,12 @@
     "_restitution": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 287.5,
+      "x": 0,
       "y": 0
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 600,
+      "width": 580,
       "height": 50
     },
     "_id": ""
@@ -144,7 +144,6 @@
       "__expectedType__": "cc.Prefab"
     },
     "prefabRadius": 25,
-    "settingEggCount": 11,
     "canvas": null,
     "collider": {
       "__id__": 4
@@ -169,7 +168,7 @@
     "node": {
       "__id__": 1
     },
-    "_enabled": false,
+    "_enabled": true,
     "__prefab": {
       "__id__": 9
     },
@@ -204,6 +203,7 @@
       "__id__": 0
     },
     "fileId": "43SqWV4nRAqrMiTTS8zm/A",
+    "instance": null,
     "targetOverrides": []
   }
 ]

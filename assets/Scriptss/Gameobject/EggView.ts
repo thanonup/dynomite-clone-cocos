@@ -85,7 +85,6 @@ export class EggView extends Component {
             this.isOnGrid = isGrid
             this.isBullet = !isGrid
             this.isDestroying = false
-            console.log(bean.type)
         })
 
         // this.node.on(Input.EventType.MOUSE_DOWN, this.onClick, this)
@@ -108,9 +107,8 @@ export class EggView extends Component {
                             falling = false
                         }
                     })
-
                     if (falling) this.onBeforeDestory()
-                }, 1)
+                }, 0.17)
             },
             this
         )
@@ -141,9 +139,6 @@ export class EggView extends Component {
     }
 
     private OnEggCollision(selfCollider: Collider2D, otherCollider: Collider2D) {
-        console.log(selfCollider.getComponent(EggView).eggPod.bean.type)
-        console.log(otherCollider.getComponent(EggView).eggPod.bean.type)
-
         if (!this.isOnGrid) {
             this.targetPosition = this.getGridPosition(selfCollider, otherCollider)
             this.isCollided = true
@@ -188,6 +183,9 @@ export class EggView extends Component {
                 vec = new Vec3(otherCollider.node.position.x - this.uiTransform.width, otherCollider.node.position.y)
             else vec = new Vec3(otherCollider.node.position.x + this.uiTransform.width, otherCollider.node.position.y)
         }
+
+        if (vec.x > 262.5) vec.x -= this.uiTransform.width
+        if (vec.x < -262.5) vec.x += this.uiTransform.width
 
         return vec
     }
@@ -235,16 +233,6 @@ export class EggView extends Component {
         this.collider.enabled = false
         this.rb.linearVelocity = new Vec2(0, 5)
         this.rb.gravityScale = 1
-
-        // this.scheduleOnce(() => {
-        //     console.log('test4')
-        //     this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)
-        // }, 0.3)
-
-        // this.scheduleOnce(() => {
-        //     console.log('test3')
-        //     this.returnToPool()
-        // }, 3)
 
         setTimeout(() => (this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)), 300, this)
         setTimeout(() => this.returnToPool(), 3000, this)
