@@ -33,8 +33,8 @@ export class EggPod {
         })
     }
 
-    public ChangeBean(bean: EggBean) {
-        this.eventTarget.emit('BeanChange', bean)
+    public ChangeBean(bean: EggBean, isOnGrid: boolean = true) {
+        this.eventTarget.emit('BeanChange', bean, isOnGrid)
     }
 
     public addEggToEggList(eggView: EggView) {
@@ -59,11 +59,11 @@ export class EggPod {
         })
     }
 
-    public resetList() {
-        this.eggList = new Array<EggView>()
+    public resetPod() {
+        this.eggList = []
         this.eggList.push(this.eggView)
 
-        this.eggListInType = new Array<EggView>()
+        this.eggListInType = []
         this.eggListInType.push(this.eggView)
     }
 

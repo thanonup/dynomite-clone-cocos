@@ -5,6 +5,7 @@ import {
     Component,
     instantiate,
     Node,
+    NodePool,
     Prefab,
     resources,
     UITransform,
@@ -57,10 +58,14 @@ export class SpawnerView extends Component {
     private timer: number = 0
     private count: number = 0
 
+    public pool = new NodePool()
+
     public doInit() {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
         this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
+
+        this.initPool()
 
         for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
             if (i % 2 == 0) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
@@ -68,18 +73,40 @@ export class SpawnerView extends Component {
         }
     }
 
+    private initPool() {
+        let initCount = 11
+        for (let i = 0; i < initCount; i++) {
+            let egg = instantiate(this.eggPrefab).getComponent(EggView)
+            egg.doInit(this.pool)
+            this.pool.put(egg.node)
+        }
+    }
+
+    public getFromPool(): EggView {
+        if (this.pool.size() > 0) {
+            return this.pool.get().getComponent(EggView)
+        } else {
+            let egg = instantiate(this.eggPrefab).getComponent(EggView)
+            egg.doInit(this.pool)
+            return egg
+        }
+    }
+
     private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number) {
         for (let i = 0; i < countAll; i++) {
-            const randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
-            const bean = this.gameplayPod.beanEggDataList[randomNumber]
-            const egg = instantiate(this.eggPrefab).getComponent(EggView)
-            egg.doInit(bean, true)
-            egg.node.name += ' ' + i + ' ' + bean.type
+            var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
+            var bean = this.gameplayPod.beanEggDataList[randomNumber]
+
+            let egg: EggView = this.getFromPool().getComponent(EggView)
+            egg.node.name = 'Egg ' + i + ' ' + bean.type
+
             const spawnerSize = this.node.getComponent(UITransform).width
             egg.node.position.set(
                 -spawnerSize / 2 + (this.prefabRadius + i * 50) + distanceX + 2.5,
                 this.node.position.y + this.prefabRadius - distanceY
             )
+            egg.eggPod.ChangeBean(bean, true)
+
             this.canvas.addChild(egg.node)
         }
     }
