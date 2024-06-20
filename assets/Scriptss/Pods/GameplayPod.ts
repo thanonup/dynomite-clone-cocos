@@ -3,6 +3,7 @@ import { GameplayState } from '../States/GameplayState'
 import { EggBean } from '../Bean/EggBean'
 
 export class GameplayPod {
+    public score: number = 0
     public gameSpeed: number = 0
     public beanEggDataList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
@@ -39,5 +40,18 @@ export class GameplayPod {
             },
             this
         )
+
+        this.gameplayPodEventTarget.on(
+            'score',
+            (score: number) => {
+                this.score = score
+            },
+            this
+        )
+    }
+
+    public updateScore(score: number) {
+        const scoreUpdate = this.score + score
+        this.gameplayPodEventTarget.emit('score', scoreUpdate)
     }
 }

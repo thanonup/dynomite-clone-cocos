@@ -214,6 +214,9 @@ export class EggView extends Component {
     public onBeforeDestory() {
         this.eggPod.removeEggFromEggList(this)
 
+        if (this.isDestroying) return
+
+        this.gameplayPod.updateScore(this.eggPod.bean.score)
         this.particleBomb1.resetSystem()
         this.particleBomb2.resetSystem()
 
