@@ -1380,7 +1380,7 @@
     "propertyPath": [
       "startGameSpeed"
     ],
-    "value": 0
+    "value": 5
   },
   {
     "__type__": "CCPropertyOverrideInfo",

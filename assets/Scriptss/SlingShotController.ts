@@ -40,6 +40,12 @@ export class SlingShotController extends Component {
     public doInit() {
         this.gameplayPod = GameplayPod.instance
 
+        this.gameplayPod.beanEggDataSlingList = [
+            this.gameplayPod.beanEggDataList[0],
+            this.gameplayPod.beanEggDataList[1],
+            this.gameplayPod.beanEggDataList[2],
+        ]
+
         this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
         this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
         this.spawnEgg()
@@ -48,11 +54,11 @@ export class SlingShotController extends Component {
     private spawnEgg() {
         const randomBean = this.gameplayPod.nextEggSpawnBean
             ? this.gameplayPod.nextEggSpawnBean
-            : this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)]
+            : this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataSlingList.length)]
 
         this.gameplayPod.gameplayPodEventTarget.emit(
             'nextEggSpawn',
-            this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)]
+            this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataSlingList.length)]
         )
         this.egg = this.spawnerView.getFromPool().getComponent(EggView)
         this.egg.eggPod.ChangeBean(randomBean, false)

@@ -23,6 +23,7 @@ import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
 import { AssetManagerManual } from '../Managers/AssetManagerManual'
 import { GameplayPod } from '../Pods/GameplayPod'
+import { GameConfig } from '../GameConfig'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -123,6 +124,10 @@ export class EggView extends Component {
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
     }
 
+    public updateCurrentLineSpawn(line: number) {
+        this.eggPod.currentLine = line
+    }
+
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.tag == 30) {
             this.canFall = true
@@ -215,6 +220,12 @@ export class EggView extends Component {
         this.eggPod.removeEggFromEggList(this)
 
         if (this.isDestroying) return
+
+        if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_1) {
+            this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[3])
+        } else if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_2) {
+            this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[4])
+        }
 
         this.gameplayPod.updateScore(this.eggPod.bean.score)
         this.particleBomb1.resetSystem()
