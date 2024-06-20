@@ -13,6 +13,7 @@ import {
 } from 'cc'
 import { EggBean } from './Bean/EggBean'
 import { EggView } from './Gameobject/EggView'
+import { SpawnerView } from './SpawnerView'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
@@ -25,8 +26,11 @@ export class SlingShotController extends Component {
     @property({ type: UITransform })
     canvas: UITransform
 
-    @property({ type: RigidBody2D })
-    egg: RigidBody2D
+    @property({ type: SpawnerView })
+    spawnerView: SpawnerView
+
+    @property({ type: EggView })
+    egg: EggView
 
     power = 30
 
@@ -46,11 +50,11 @@ export class SlingShotController extends Component {
 
     private spawnEgg() {
         var randomNumber = Math.floor(Math.random() * this.beanList.length)
-        let egg: EggView = instantiate(this.eggPrefeb).getComponent(EggView)
-        egg.doInit(this.beanList[randomNumber], false)
-        this.egg = egg.rb
-        this.canvas.node.addChild(egg.node)
+        this.egg = this.spawnerView.getFromPool().getComponent(EggView)
+        this.egg.eggPod.ChangeBean(this.beanList[randomNumber], false)
+        this.canvas.node.addChild(this.egg.node)
         this.egg.node.position = this.node.position
+        this.egg.collider.enabled = false
     }
 
     update(deltaTime: number) {}
@@ -61,7 +65,9 @@ export class SlingShotController extends Component {
 
     private onMouseUp(event: EventMouse) {
         if (this.egg == undefined) return
-        this.egg.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), this.power)
+        this.egg.rb.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), this.power)
+        this.egg.collider.enabled = true
+
         this.egg = undefined
 
         setTimeout(() => this.spawnEgg(), 1000)
