@@ -7,6 +7,8 @@ export class GameplayPod {
     public gameSpeed: number = 0
     public beanEggDataList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
+    public nextEggSpawnBean: EggBean
+
     public gameplayPodEventTarget = new EventTarget()
     public firstLoad: boolean = false
 
@@ -45,6 +47,14 @@ export class GameplayPod {
             'score',
             (score: number) => {
                 this.score = score
+            },
+            this
+        )
+
+        this.gameplayPodEventTarget.on(
+            'nextEggSpawn',
+            (eggBean: EggBean) => {
+                this.nextEggSpawnBean = eggBean
             },
             this
         )

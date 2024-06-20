@@ -70,9 +70,9 @@ export class SpawnerView extends Component {
 
     private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number) {
         for (let i = 0; i < countAll; i++) {
-            var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
-            var bean = this.gameplayPod.beanEggDataList[randomNumber]
-            let egg = instantiate(this.eggPrefab).getComponent(EggView)
+            const randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
+            const bean = this.gameplayPod.beanEggDataList[randomNumber]
+            const egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(bean, true)
             egg.node.name += ' ' + i + ' ' + bean.type
             const spawnerSize = this.node.getComponent(UITransform).width
