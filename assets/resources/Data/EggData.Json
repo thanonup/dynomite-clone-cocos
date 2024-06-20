@@ -1,22 +1,27 @@
 [
     {
         "keySprite": "chick",
-        "type": "Chick"
+        "type": "Chick",
+        "score": 20
     },
     {
         "keySprite": "dog",
-        "type": "Dog"
+        "type": "Dog",
+        "score": 20
     },
     {
         "keySprite": "cow",
-        "type": "Cow"
+        "type": "Cow",
+        "score": 20
     },
     {
         "keySprite": "pig",
-        "type": "Pig"
+        "type": "Pig",
+        "score": 20
     },
     {
         "keySprite": "rat",
-        "type": "Rat"
+        "type": "Rat",
+        "score": 20
     }
 ]

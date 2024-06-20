@@ -192,6 +192,9 @@ export class EggView extends Component {
     }
 
     public onBeforeDestory() {
+        if (this.isDestorying) return
+
+        this.gameplayPod.updateScore(this.eggPod.bean.score)
         this.particleBomb1.resetSystem()
         this.particleBomb2.resetSystem()
 
@@ -211,7 +214,6 @@ export class EggView extends Component {
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        console.log('test')
         if (otherCollider.tag == 30) {
             this.canFall = false
         }
