@@ -13,11 +13,8 @@ import {
 } from 'cc'
 import { EggBean } from './Bean/EggBean'
 import { EggView } from './Gameobject/EggView'
-<<<<<<< HEAD
-import { GameplayPod } from './Pods/GameplayPod'
-=======
 import { SpawnerView } from './SpawnerView'
->>>>>>> 77688fd76801796126ff48d4e77d8de08a5ff343
+import { GameplayPod } from './Pods/GameplayPod'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
