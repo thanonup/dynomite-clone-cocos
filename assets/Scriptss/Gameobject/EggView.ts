@@ -11,17 +11,12 @@ import {
     UITransform,
     Vec2,
     Vec3,
-    resources,
-    SpriteFrame,
-    ImageAsset,
     CCFloat,
-    PhysicsSystem2D,
-    ERaycast2DType,
     Input,
     ParticleSystem2D,
-    tween,
-    quat,
     math,
+    AudioSource,
+    AudioClip,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
@@ -55,6 +50,14 @@ export class EggView extends Component {
     @property({ type: ParticleSystem2D })
     private particleBomb2: ParticleSystem2D
 
+    @property({ type: AudioSource })
+    private audio: AudioSource
+
+    @property({ type: AudioClip })
+    private contactClip
+    @property({ type: AudioClip })
+    private destroyClip
+
     private speedMove: number
     private isCollided: boolean = false
     private targetPosition: Vec3
@@ -79,6 +82,7 @@ export class EggView extends Component {
         this.gameplayPod.gameplayPodEventTarget.on(
             'updateCollision',
             () => {
+                if (this.isDestorying) return
                 this.eggPod.resetList()
                 this.collider.enabled = false
                 this.scheduleOnce(() => {
@@ -140,8 +144,10 @@ export class EggView extends Component {
                     x.onBeforeDestory()
                 })
 
+                this.onAudioPlay(this.destroyClip)
                 this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
-            }
+            } else this.onAudioPlay(this.contactClip)
+
             this.isBullet = false
         }, 0.05)
     }
@@ -170,6 +176,12 @@ export class EggView extends Component {
         }
 
         return vec
+    }
+
+    private onAudioPlay(clip: AudioClip) {
+        this.audio.clip = clip
+        if (clip == this.destroyClip) this.audio.play()
+        else if (!this.audio.playing) this.audio.play()
     }
 
     update(deltaTime: number) {
