@@ -24,6 +24,7 @@ import { EggBean } from '../Bean/EggBean'
 import { AssetManagerManual } from '../Managers/AssetManagerManual'
 import { GameplayPod } from '../Pods/GameplayPod'
 import { GameConfig } from '../GameConfig'
+import { GameplayState } from '../States/GameplayState'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -38,7 +39,7 @@ export class EggView extends Component {
     @property({ type: CCBoolean })
     public canFall: boolean = true
     @property({ type: CCBoolean })
-    isBullet: boolean
+    public isBullet: boolean
 
     @property({ type: EggPod })
     public eggPod: EggPod
@@ -238,10 +239,12 @@ export class EggView extends Component {
     }
 
     update(deltaTime: number) {
-        this.canFall =
-            this.node.position.y <= this.node.parent.getComponent(UITransform).width / 2 - this.uiTransform.height
+        if (GameplayPod.instance.gameState != GameplayState.GamePlay) return
 
         if (!this.isDestroying) {
+            this.canFall =
+                this.node.position.y <= this.node.parent.getComponent(UITransform).width / 2 - this.uiTransform.height
+
             if (this.isCollided) {
                 this.node.setPosition(this.targetPosition)
                 this.isCollided = false

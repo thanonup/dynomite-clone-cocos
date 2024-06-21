@@ -2,6 +2,7 @@ import { _decorator, Component, EventMouse, Input, Prefab, UITransform, Vec2, Ve
 import { EggView } from './Gameobject/EggView'
 import { SpawnerView } from './SpawnerView'
 import { GameplayPod } from './Pods/GameplayPod'
+import { GameplayState } from './States/GameplayState'
 const { ccclass, property } = _decorator
 
 @ccclass('SlingShotController')
@@ -57,10 +58,12 @@ export class SlingShotController extends Component {
     update(deltaTime: number) {}
 
     private onMouseDown(event: EventMouse) {
+        if (this.gameplayPod.gameState != GameplayState.GamePlay) return
         if (this.egg == undefined) return
     }
 
     private onMouseUp(event: EventMouse) {
+        if (this.gameplayPod.gameState != GameplayState.GamePlay) return
         if (this.egg == undefined) return
         this.egg.rb.linearVelocity = this.multiplyVec2(this.getDirectionformBall(event), this.power)
         this.egg.collider.enabled = true

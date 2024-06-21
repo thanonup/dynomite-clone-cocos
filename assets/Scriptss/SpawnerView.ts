@@ -16,6 +16,7 @@ import {
 import { EggView } from './Gameobject/EggView'
 import { GameplayPod } from './Pods/GameplayPod'
 import { GameConfig } from './GameConfig'
+import { GameplayState } from './States/GameplayState'
 
 const { ccclass, property } = _decorator
 
@@ -170,6 +171,8 @@ export class SpawnerView extends Component {
     }
 
     update(deltaTime: number) {
+        if (GameplayPod.instance.gameState != GameplayState.GamePlay) return
+
         if (!this.isStart) return
         this.timer += deltaTime * this.startGameSpeed
         if (this.eggviewList.length == 0) {
