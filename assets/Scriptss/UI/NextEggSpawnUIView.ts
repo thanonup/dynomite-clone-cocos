@@ -1,7 +1,7 @@
 import { _decorator, Component, Node, Sprite, Tween, tween, Vec3 } from 'cc'
-import { GameplayPod } from './Pods/GameplayPod'
-import { EggBean } from './Bean/EggBean'
-import { AssetManagerManual } from './Managers/AssetManagerManual'
+import { GameplayPod } from '../Pods/GameplayPod'
+import { AssetManagerManual } from '../Managers/AssetManagerManual'
+import { EggBean } from '../Bean/EggBean'
 const { ccclass, property } = _decorator
 
 @ccclass('NextEggSpawnUIView')
