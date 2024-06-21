@@ -43,7 +43,7 @@ export class EggView extends Component {
     public eggPod: EggPod
 
     @property
-    private eggSprite: Sprite
+    public eggSprite: Sprite
     @property
     public collider: CircleCollider2D
 
@@ -78,26 +78,47 @@ export class EggView extends Component {
 
         this.eggPod = new EggPod(this)
 
-        this.eggPod.eventTarget.on('BeanChange', (bean: EggBean, isGrid: boolean) => {
-            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.Instance.getAsset(bean.keySprite)
-            this.collider.enabled = true
-            this.isOnGrid = isGrid
-            this.isBullet = !isGrid
-            this.isDestroying = false
-        })
+        this.beanSubscribe()
 
-        // this.node.on(Input.EventType.MOUSE_DOWN, this.onClick, this)
+        this.node.on(Input.EventType.MOUSE_DOWN, this.onClick, this)
 
         this.gameplayPod.gameplayPodEventTarget.on(
             'updateCollision',
             () => {
                 if (this.isDestroying) return
+                // if (
+                //     this.node.position.y >=
+                //     this.node.parent.getComponent(UITransform).height / 2 - this.uiTransform.height
+                // )
+                //     return
+
                 this.eggPod.resetPod()
-                this.collider.enabled = false
-                this.scheduleOnce(() => {
-                    this.collider.enabled = true
-                    this.rb.allowSleep = false
-                }, 0.001)
+
+                // this.collider.enabled = false
+                // this.scheduleOnce(() => {
+                //     this.collider.enabled = true
+                //     this.rb.allowSleep = false
+                // }, 0.001)
+
+                this.gameplayPod.eggInScene.forEach((egg) => {
+                    var distance = Vec2.distance(egg.node.position, this.node.position)
+                    // console.log(distance)
+
+                    if (egg != this && distance <= this.uiTransform.width + this.uiTransform.width / 2 + 5) {
+                        // check is already in list
+                        if (!this.eggPod.eggList.find((x) => x == egg)) {
+                            //add new egg at list for all element in list
+                            this.eggPod.addEggToEggList(egg)
+                        }
+
+                        // add new same type egg at list
+                        if (egg.eggPod.bean.type == this.eggPod.bean.type) {
+                            if (!this.eggPod.eggListInType.find((x) => x == egg)) this.eggPod.addEggToEggListInType(egg)
+                        }
+
+                        // this.handleEggContact(otherCollider, selfCollider)
+                    }
+                })
 
                 this.scheduleOnce(() => {
                     var falling = true
@@ -121,15 +142,32 @@ export class EggView extends Component {
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
     }
 
+    private beanSubscribe() {
+        this.eggPod.eventTarget.on('BeanChange', (bean: EggBean, isGrid: boolean) => {
+            this.eggSprite.getComponent(Sprite).spriteFrame = AssetManagerManual.Instance.getAsset(bean.keySprite)
+            this.collider.enabled = true
+            this.isOnGrid = isGrid
+            this.isBullet = !isGrid
+            this.isDestroying = false
+            this.gameplayPod.eggInScene.push(this)
+        })
+    }
+
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.tag == 30) {
-            this.canFall = true
+            // this.canFall = true
         }
     }
 
     private onClick(event: MouseEvent) {
         this.eggPod.eggList.forEach((x) => {
-            console.log(x.name)
+            x.eggSprite.color = math.color(255, 0, 0, 255)
+            setTimeout(() => (x.eggSprite.color = math.color(255, 255, 255, 255)), 3000, this)
+        })
+
+        this.eggPod.eggListInType.forEach((x) => {
+            x.eggSprite.color = math.color(0, 0, 255, 255)
+            setTimeout(() => (x.eggSprite.color = math.color(255, 255, 255, 255)), 3000, this)
         })
     }
 
@@ -145,10 +183,15 @@ export class EggView extends Component {
         this.scheduleOnce(() => {
             if (this.eggPod.eggListInType.length > 2) {
                 this.eggPod.eggListInType.forEach((x) => {
+                    x.gameplayPod.removeEggInScene(x)
                     x.onBeforeDestory()
                 })
 
                 this.onAudioPlay(this.destroyClip)
+                this.gameplayPod.eggInScene.forEach((x) => {
+                    x.eggPod.resetPod()
+                })
+
                 this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
             } else this.onAudioPlay(this.contactClip)
 
@@ -192,6 +235,9 @@ export class EggView extends Component {
     }
 
     update(deltaTime: number) {
+        this.canFall =
+            this.node.position.y <= this.node.parent.getComponent(UITransform).width / 2 - this.uiTransform.height
+
         if (!this.isDestroying) {
             if (this.isCollided) {
                 this.node.setPosition(this.targetPosition)
@@ -210,6 +256,7 @@ export class EggView extends Component {
     }
 
     public onBeforeDestory() {
+        this.gameplayPod.removeEggInScene(this)
         this.eggPod.removeEggFromEggList(this)
 
         if (this.isDestroying) return
@@ -229,7 +276,7 @@ export class EggView extends Component {
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.tag == 30) {
-            this.canFall = false
+            // this.canFall = false
         }
 
         this.handleEggContact(otherCollider, selfCollider)

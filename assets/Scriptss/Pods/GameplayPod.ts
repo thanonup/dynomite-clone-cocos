@@ -1,6 +1,7 @@
 import { EventTarget } from 'cc'
 import { GameplayState } from '../States/GameplayState'
 import { EggBean } from '../Bean/EggBean'
+import { EggView } from '../Gameobject/EggView'
 
 export class GameplayPod {
     public score: number = 0
@@ -8,6 +9,8 @@ export class GameplayPod {
     public beanEggDataList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
     public nextEggSpawnBean: EggBean
+
+    public eggInScene: EggView[] = []
 
     public gameplayPodEventTarget = new EventTarget()
     public firstLoad: boolean = false
@@ -63,5 +66,10 @@ export class GameplayPod {
     public updateScore(score: number) {
         const scoreUpdate = this.score + score
         this.gameplayPodEventTarget.emit('score', scoreUpdate)
+    }
+
+    public removeEggInScene(eggView: EggView) {
+        var index = this.eggInScene.indexOf(eggView, 0)
+        if (index > -1) this.eggInScene.splice(index, 1)
     }
 }

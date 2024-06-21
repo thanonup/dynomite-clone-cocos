@@ -39,12 +39,21 @@ export class EggPod {
 
     public addEggToEggList(eggView: EggView) {
         // console.log('add')
+
+        eggView.eggPod.eggList.forEach((egg) => {
+            if (!this.eggList.find((x) => x == egg)) {
+                this.onAddEggList(egg)
+            }
+        })
+
         this.eggList.forEach((eggElement) => {
-            eggView.eggPod.eggList.forEach((egg) => {
-                if (!eggElement.eggPod.eggList.find((x) => x == egg)) {
-                    eggElement.eggPod.onAddEggList(egg)
-                }
-            })
+            // eggView.eggPod.eggList.forEach((egg) => {
+            //     if (!eggElement.eggPod.eggList.find((x) => x == egg)) {
+            //         eggElement.eggPod.onAddEggList(egg)
+            //     }
+            // })
+
+            eggElement.eggPod.eggList = this.eggList
         })
     }
 
@@ -75,12 +84,20 @@ export class EggPod {
 
     public addEggToEggListInType(eggView: EggView) {
         // console.log('add in type')
+        eggView.eggPod.eggListInType.forEach((egg) => {
+            if (!this.eggListInType.find((x) => x == egg)) {
+                this.eggListInType.push(egg)
+            }
+        })
+
         this.eggListInType.forEach((eggElement) => {
             eggView.eggPod.eggListInType.forEach((egg) => {
                 if (!eggElement.eggPod.eggListInType.find((x) => x == egg)) {
                     eggElement.eggPod.eggListInType.push(egg)
                 }
             })
+
+            eggElement.eggPod.eggListInType = this.eggListInType
         })
     }
 }

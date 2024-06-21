@@ -2,12 +2,14 @@ import {
     _decorator,
     BoxCollider2D,
     CCFloat,
+    Collider2D,
     Component,
+    Contact2DType,
     instantiate,
+    IPhysics2DContact,
     Node,
     NodePool,
     Prefab,
-    resources,
     UITransform,
     Vec2,
 } from 'cc'
@@ -62,6 +64,8 @@ export class SpawnerView extends Component {
 
     public pool = new NodePool()
 
+    private eggviewList: Array<EggView> = new Array<EggView>()
+
     public doInit() {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
@@ -69,9 +73,38 @@ export class SpawnerView extends Component {
 
         this.initPool()
 
-        for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
-            if (i % 2 == 0) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
-            else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
+        this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
+            this.eggviewList.push(x)
+        })
+
+        for (let i = 1; i < this.settingEggRowAndColumn.y - 1; i++) {
+            if (i % 2 == 0) {
+                this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
+            } else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
+        }
+
+        this.isStart = true
+
+        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+        this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+    }
+
+    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        if (otherCollider.tag == 99) {
+            var eggView = otherCollider.getComponent(EggView)
+
+            if (eggView.isOnGrid && !this.eggviewList.find((x) => x == eggView)) {
+                this.eggviewList.push(eggView)
+            }
+        }
+    }
+
+    onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+        if (otherCollider.tag == 99) {
+            var eggView = otherCollider.getComponent(EggView)
+
+            const index = this.eggviewList.indexOf(eggView, 0)
+            if (index > -1) this.eggviewList.splice(index, 1)
         }
     }
 
@@ -94,7 +127,8 @@ export class SpawnerView extends Component {
         }
     }
 
-    private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number) {
+    private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number): Array<EggView> {
+        var egglist = new Array<EggView>()
         for (let i = 0; i < countAll; i++) {
             var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
             var bean = this.gameplayPod.beanEggDataList[randomNumber]
@@ -105,20 +139,22 @@ export class SpawnerView extends Component {
             const spawnerSize = this.node.getComponent(UITransform).width
             egg.node.position.set(
                 -spawnerSize / 2 + (this.prefabRadius + i * 50) + distanceX + 2.5,
-                this.node.position.y + this.prefabRadius - distanceY
+                this.node.position.y - distanceY
             )
             egg.eggPod.ChangeBean(bean, true)
 
             this.canvas.addChild(egg.node)
+            egglist.push(egg)
         }
 
+        return egglist
         this.isStart = true
     }
 
     update(deltaTime: number) {
         if (!this.isStart) return
         this.timer += deltaTime * this.startGameSpeed
-        if (this.timer >= this.offset.y) {
+        if (this.eggviewList.length == 0) {
             this.timer = 0
             if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0)
             else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, 0)
