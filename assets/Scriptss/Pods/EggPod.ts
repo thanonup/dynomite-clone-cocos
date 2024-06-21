@@ -7,6 +7,7 @@ const { ccclass, property } = _decorator
 export class EggPod {
     public eggList: Array<EggView> = new Array<EggView>()
     public eggListInType: Array<EggView> = new Array<EggView>()
+    public currentLine: number
 
     public bean: EggBean
     public eventTarget = new EventTarget()

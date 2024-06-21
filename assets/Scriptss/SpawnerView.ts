@@ -15,8 +15,7 @@ import {
 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { GameplayPod } from './Pods/GameplayPod'
-import { GameplayState } from './States/GameplayState'
-import { EggBean } from './Bean/EggBean'
+import { GameConfig } from './GameConfig'
 
 const { ccclass, property } = _decorator
 
@@ -68,16 +67,22 @@ export class SpawnerView extends Component {
 
     public doInit() {
         console.log('Init Spawner')
+        this.initPool()
+
         this.gameplayPod = GameplayPod.instance
         this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
 
-        this.initPool()
+        this.gameplayPod.beanEggDataSpawnerList = [
+            this.gameplayPod.beanEggDataList[0],
+            this.gameplayPod.beanEggDataList[1],
+            this.gameplayPod.beanEggDataList[2],
+        ]
 
         this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
             this.eggviewList.push(x)
         })
 
-        for (let i = 1; i < this.settingEggRowAndColumn.y - 1; i++) {
+        for (let i = 1; i < this.settingEggRowAndColumn.y; i++) {
             if (i % 2 == 0) {
                 this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
             } else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
@@ -109,7 +114,7 @@ export class SpawnerView extends Component {
     }
 
     private initPool() {
-        let initCount = 11
+        let initCount = 110
         for (let i = 0; i < initCount; i++) {
             let egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(this.pool)
@@ -130,11 +135,12 @@ export class SpawnerView extends Component {
     private spawnEggGroup(countAll: number, distanceX?: number, distanceY?: number): Array<EggView> {
         var egglist = new Array<EggView>()
         for (let i = 0; i < countAll; i++) {
-            var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataList.length)
+            var randomNumber = Math.floor(Math.random() * this.gameplayPod.beanEggDataSpawnerList.length)
             var bean = this.gameplayPod.beanEggDataList[randomNumber]
 
             let egg: EggView = this.getFromPool().getComponent(EggView)
             egg.node.name = 'Egg ' + i + ' ' + bean.type
+            egg.updateCurrentLineSpawn(this.count)
 
             const spawnerSize = this.node.getComponent(UITransform).width
             egg.node.position.set(
@@ -147,8 +153,20 @@ export class SpawnerView extends Component {
             egglist.push(egg)
         }
 
-        return egglist
+        this.count++
+
+        if (this.count == GameConfig.NEXT_SPAWN_NEW_EGG_1) {
+            if (this.gameplayPod.beanEggDataSpawnerList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
+                this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[3])
+            }
+        } else if (this.count == GameConfig.NEXT_SPAWN_NEW_EGG_2) {
+            if (this.gameplayPod.beanEggDataSpawnerList.indexOf(this.gameplayPod.beanEggDataList[4]) == -1) {
+                this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[4])
+            }
+        }
+
         this.isStart = true
+        return egglist
     }
 
     update(deltaTime: number) {
@@ -158,7 +176,6 @@ export class SpawnerView extends Component {
             this.timer = 0
             if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0)
             else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, 0)
-            this.count++
         }
     }
 }

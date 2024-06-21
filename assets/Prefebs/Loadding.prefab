@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Controller",
+    "_name": "Loadding",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Controller",
+    "_name": "Loadding",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -30,7 +30,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": 0,
-      "y": -338.029,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -57,7 +57,7 @@
     "_id": ""
   },
   {
-    "__type__": "1d5c7l+kUtMEr9yRDkyRvuu",
+    "__type__": "11d0fxyLH9C87v+pf86shPm",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -68,17 +68,13 @@
     "__prefab": {
       "__id__": 3
     },
-    "eggPrefeb": {
-      "__uuid__": "cddbf90d-105c-465f-9e48-3e208a507c08",
-      "__expectedType__": "cc.Prefab"
-    },
-    "canvas": null,
-    "spawnerView": null,
+    "loaddingNode": null,
+    "loaddingSpriteNode": null,
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "7efuXz9SVP7YB3IeFUPAGW"
+    "fileId": "ddXqeYz01Fa68tQcxbn9/l"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -88,7 +84,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "adJdo6IShK35F7zqQzs0kf",
+    "fileId": "b7YXjj6YNAGYHAolp1tLxW",
     "targetOverrides": null
   }
 ]

@@ -7,6 +7,8 @@ export class GameplayPod {
     public score: number = 0
     public gameSpeed: number = 0
     public beanEggDataList: Array<EggBean> = []
+    public beanEggDataSpawnerList: Array<EggBean> = []
+    public beanEggDataSlingList: Array<EggBean> = []
     public gameState: GameplayState = GameplayState.GamePlay
     public nextEggSpawnBean: EggBean
 

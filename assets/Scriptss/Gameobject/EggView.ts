@@ -12,17 +12,18 @@ import {
     Vec2,
     Vec3,
     CCFloat,
-    Input,
     ParticleSystem2D,
     math,
     AudioSource,
     AudioClip,
     NodePool,
+    Input,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
 import { EggBean } from '../Bean/EggBean'
 import { AssetManagerManual } from '../Managers/AssetManagerManual'
 import { GameplayPod } from '../Pods/GameplayPod'
+import { GameConfig } from '../GameConfig'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -152,6 +153,9 @@ export class EggView extends Component {
             this.gameplayPod.eggInScene.push(this)
         })
     }
+    public updateCurrentLineSpawn(line: number) {
+        this.eggPod.currentLine = line
+    }
 
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.tag == 30) {
@@ -261,7 +265,21 @@ export class EggView extends Component {
 
         if (this.isDestroying) return
 
+        if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_1) {
+            if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
+                this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[3])
+            }
+        } else if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_2) {
+            if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[4]) == -1) {
+                this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[4])
+            }
+        }
+        console.log(this.eggPod.bean.score)
+        console.log(this.gameplayPod)
+        console.log(this.gameplayPod.updateScore)
+
         this.gameplayPod.updateScore(this.eggPod.bean.score)
+
         this.particleBomb1.resetSystem()
         this.particleBomb2.resetSystem()
 

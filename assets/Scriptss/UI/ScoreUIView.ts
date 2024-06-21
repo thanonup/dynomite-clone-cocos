@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Node } from 'cc'
-import { GameplayPod } from './Pods/GameplayPod'
+import { GameplayPod } from '../Pods/GameplayPod'
 const { ccclass, property } = _decorator
 
 @ccclass('ScoreUIView')
