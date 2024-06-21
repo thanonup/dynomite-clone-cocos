@@ -7,14 +7,11 @@ import {
     Node,
     NodePool,
     Prefab,
-    resources,
     UITransform,
     Vec2,
 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { GameplayPod } from './Pods/GameplayPod'
-import { GameplayState } from './States/GameplayState'
-import { EggBean } from './Bean/EggBean'
 import { GameConfig } from './GameConfig'
 
 const { ccclass, property } = _decorator
@@ -133,9 +130,13 @@ export class SpawnerView extends Component {
         this.count++
 
         if (this.count == GameConfig.NEXT_SPAWN_NEW_EGG_1) {
-            this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[3])
+            if (this.gameplayPod.beanEggDataSpawnerList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
+                this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[3])
+            }
         } else if (this.count == GameConfig.NEXT_SPAWN_NEW_EGG_2) {
-            this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[4])
+            if (this.gameplayPod.beanEggDataSpawnerList.indexOf(this.gameplayPod.beanEggDataList[4]) == -1) {
+                this.gameplayPod.beanEggDataSpawnerList.push(this.gameplayPod.beanEggDataList[4])
+            }
         }
 
         this.isStart = true

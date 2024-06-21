@@ -1,17 +1,4 @@
-import {
-    _decorator,
-    Component,
-    EventMouse,
-    Input,
-    instantiate,
-    Prefab,
-    resources,
-    RigidBody2D,
-    UITransform,
-    Vec2,
-    Vec3,
-} from 'cc'
-import { EggBean } from './Bean/EggBean'
+import { _decorator, Component, EventMouse, Input, Prefab, UITransform, Vec2, Vec3 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { SpawnerView } from './SpawnerView'
 import { GameplayPod } from './Pods/GameplayPod'

@@ -12,7 +12,6 @@ import {
     Vec2,
     Vec3,
     CCFloat,
-    Input,
     ParticleSystem2D,
     math,
     AudioSource,
@@ -220,9 +219,13 @@ export class EggView extends Component {
         if (this.isDestroying) return
 
         if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_1) {
-            this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[3])
+            if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
+                this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[3])
+            }
         } else if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_2) {
-            this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[4])
+            if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[4]) == -1) {
+                this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[4])
+            }
         }
 
         this.gameplayPod.updateScore(this.eggPod.bean.score)

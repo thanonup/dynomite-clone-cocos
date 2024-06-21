@@ -20,7 +20,6 @@ export class NextEggSpawnUIView extends Component {
         this.eggSprite.spriteFrame = AssetManagerManual.Instance.getAsset(this.gameplayPod.nextEggSpawnBean.keySprite)
 
         this.gameplayPod.gameplayPodEventTarget.on('nextEggSpawn', (nextEggBean: EggBean) => {
-            console.log('update egg next')
             this.changeAssetNextEgg(nextEggBean)
         })
     }
