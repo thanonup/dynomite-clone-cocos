@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "a6a3a1a6-2f1e-4b77-90f2-46f5abd8eaae",
+  "uuid": "efe73877-c2b3-4d07-b694-66ec21133f69",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Canvas-001"
+    "syncNodeName": "Gameplay"
   }
 }
