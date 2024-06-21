@@ -187,7 +187,6 @@ export class EggView extends Component {
         this.scheduleOnce(() => {
             if (this.eggPod.eggListInType.length > 2) {
                 this.eggPod.eggListInType.forEach((x) => {
-                    x.gameplayPod.removeEggInScene(x)
                     x.onBeforeDestory()
                 })
 
@@ -260,10 +259,10 @@ export class EggView extends Component {
     }
 
     public onBeforeDestory() {
+        if (this.isDestroying) return
+
         this.gameplayPod.removeEggInScene(this)
         this.eggPod.removeEggFromEggList(this)
-
-        if (this.isDestroying) return
 
         if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_1) {
             if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
@@ -274,9 +273,6 @@ export class EggView extends Component {
                 this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[4])
             }
         }
-        console.log(this.eggPod.bean.score)
-        console.log(this.gameplayPod)
-        console.log(this.gameplayPod.updateScore)
 
         this.gameplayPod.updateScore(this.eggPod.bean.score)
 
