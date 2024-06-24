@@ -24,6 +24,7 @@ import { AssetManagerManual } from '../Managers/AssetManagerManual'
 import { GameplayPod } from '../Pods/GameplayPod'
 import { GameConfig } from '../GameConfig'
 import { GameplayState } from '../States/GameplayState'
+import { AudioGameManager } from '../Managers/AudioGameManager'
 const { ccclass, property } = _decorator
 
 @ccclass('EggView')
@@ -53,18 +54,11 @@ export class EggView extends Component {
     @property({ type: ParticleSystem2D })
     private particleBomb2: ParticleSystem2D
 
-    @property({ type: AudioSource })
-    private audio: AudioSource
-
-    @property({ type: AudioClip })
-    private contactClip
-    @property({ type: AudioClip })
-    private destroyClip
-
     private speedMove: number
     private targetPosition: Vec3
     private isCollided: boolean = false
     private isDestroying: boolean = false
+    private isPlayingSound: boolean = false
 
     private pool: NodePool
 
@@ -118,6 +112,12 @@ export class EggView extends Component {
             this.speedMove = speed
         })
 
+        this.gameplayPod.gameplayPodEventTarget.on('gameState', (state: GameplayState) => {
+            if (state == GameplayState.GameOver) {
+                setTimeout(() => this.onGameOver(), this.randomIntFromRange(300, 1000), this)
+            }
+        })
+
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
     }
@@ -153,9 +153,13 @@ export class EggView extends Component {
                     x.onBeforeDestory()
                 })
 
-                this.onAudioPlay(this.destroyClip)
+                if (!this.eggPod.findIsPlayingSoundDestroy()) {
+                    this.eggPod.isPlayingSoundDestroy = true
+                    this.onAudioPlay('destroyClip')
+                }
+
                 this.gameplayPod.gameplayPodEventTarget.emit('updateCollision')
-            } else this.onAudioPlay(this.contactClip)
+            } else this.onAudioPlay('contactClip')
 
             this.isBullet = false
         }, 0.05)
@@ -190,10 +194,15 @@ export class EggView extends Component {
         return vec
     }
 
-    private onAudioPlay(clip: AudioClip) {
-        this.audio.clip = clip
-        if (clip == this.destroyClip) this.audio.play()
-        else if (!this.audio.playing) this.audio.play()
+    private onAudioPlay(key: string) {
+        if (key == 'destroyClip') {
+            AudioGameManager.Instance.playAudio(key)
+        } else if (!this.isPlayingSound) {
+            this.isPlayingSound = true
+            const timeDurationSound = AudioGameManager.Instance.playAudio(key)
+
+            this.scheduleOnce(() => (this.isPlayingSound = false), timeDurationSound)
+        }
     }
 
     update(deltaTime: number) {
@@ -242,6 +251,15 @@ export class EggView extends Component {
 
         setTimeout(() => (this.rb.linearVelocity = new Vec2(this.randomIntFromRange(-5, 5), -15)), 300, this)
         setTimeout(() => this.returnToPool(), 3000, this)
+    }
+
+    public onGameOver() {
+        this.eggPod.removeEggFromEggList(this)
+
+        this.particleBomb1.resetSystem()
+        this.particleBomb2.resetSystem()
+
+        setTimeout(() => this.returnToPool(), 300, this)
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {

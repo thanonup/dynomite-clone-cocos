@@ -8,6 +8,7 @@ export class EggPod {
     public eggList: Array<EggView> = new Array<EggView>()
     public eggListInType: Array<EggView> = new Array<EggView>()
     public currentLine: number
+    public isPlayingSoundDestroy: boolean = false
 
     public bean: EggBean
     public eventTarget = new EventTarget()
@@ -32,6 +33,10 @@ export class EggPod {
             //     console.log(x.name)
             // })
         })
+    }
+
+    public findIsPlayingSoundDestroy(): boolean {
+        return this.eggListInType.some((x) => x.eggPod.isPlayingSoundDestroy == true)
     }
 
     public ChangeBean(bean: EggBean, isOnGrid: boolean = true) {
@@ -61,6 +66,8 @@ export class EggPod {
     }
 
     public resetPod() {
+        this.isPlayingSoundDestroy = false
+
         this.eggList = []
         this.eggList.push(this.eggView)
 

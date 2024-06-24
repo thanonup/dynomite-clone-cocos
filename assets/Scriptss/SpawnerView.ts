@@ -91,7 +91,7 @@ export class SpawnerView extends Component {
     }
 
     private initPool() {
-        let initCount = 11
+        let initCount = this.settingEggRowAndColumn.x * this.settingEggRowAndColumn.y
         for (let i = 0; i < initCount; i++) {
             let egg = instantiate(this.eggPrefab).getComponent(EggView)
             egg.doInit(this.pool)
