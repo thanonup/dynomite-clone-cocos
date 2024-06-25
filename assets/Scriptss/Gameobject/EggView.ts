@@ -14,8 +14,6 @@ import {
     CCFloat,
     ParticleSystem2D,
     math,
-    AudioSource,
-    AudioClip,
     NodePool,
 } from 'cc'
 import { EggPod } from '../Pods/EggPod'
@@ -113,8 +111,17 @@ export class EggView extends Component {
         })
 
         this.gameplayPod.gameplayPodEventTarget.on('gameState', (state: GameplayState) => {
-            if (state == GameplayState.GameOver) {
-                setTimeout(() => this.onGameOver(), this.randomIntFromRange(300, 1000), this)
+            switch (state) {
+                case GameplayState.PreStart:
+                    this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+                    this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+                    break
+                case GameplayState.GameOver:
+                    setTimeout(() => this.onGameOver(), this.randomIntFromRange(300, 1000), this)
+
+                    this.collider.removeAll(Contact2DType.BEGIN_CONTACT)
+                    this.collider.removeAll(Contact2DType.END_CONTACT)
+                    break
             }
         })
 
@@ -306,6 +313,7 @@ export class EggView extends Component {
         this.isOnGrid = false
         this.isBullet = false
         this.canFall = true
+        this.isPlayingSound = false
 
         this.rb.linearVelocity = Vec2.ZERO
         this.rb.gravityScale = 0

@@ -44,7 +44,7 @@ export class GameOverView extends Component {
 
     private onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D) {
         if (otherCollider.tag == 99) {
-            if (this.gameplayPod.gameState != GameplayState.GameOver && !otherCollider.getComponent(EggView).isBullet) {
+            if (this.gameplayPod.gameState == GameplayState.GamePlay && !otherCollider.getComponent(EggView).isBullet) {
                 this.colliders.push(otherCollider)
 
                 if (this.countdownTimeout == undefined) {
@@ -66,7 +66,7 @@ export class GameOverView extends Component {
 
     private onEndContact(selfCollider: Collider2D, otherCollider: Collider2D) {
         if (otherCollider.tag == 99) {
-            this.colliders.filter((obj) => obj != otherCollider)
+            this.colliders = this.colliders.filter((obj) => obj != otherCollider)
 
             if (this.colliders.length == 0) {
                 clearTimeout(this.countdownTimeout)

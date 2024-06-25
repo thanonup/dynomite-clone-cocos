@@ -64,6 +64,7 @@ export class SpawnerView extends Component {
     public doInit() {
         console.log('Init Spawner')
         this.gameplayPod = GameplayPod.instance
+        this.gameplayPod.startSpeed = this.startGameSpeed
         this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
 
         this.gameplayPod.beanEggDataSpawnerList = [
@@ -73,7 +74,18 @@ export class SpawnerView extends Component {
         ]
 
         this.initPool()
+        this.restartGame()
 
+        this.gameplayPod.gameplayPodEventTarget.on('gameState', (gameState: GameplayState) => {
+            if (gameState == GameplayState.PreStart) {
+                this.gameplayPod.restartGame()
+                this.restartGame()
+            }
+        })
+    }
+
+    private restartGame() {
+        this.count = 0
         for (let i = 0; i < this.settingEggRowAndColumn.y; i++) {
             if (i % 2 == 0)
                 this.spawnEggGroup(
