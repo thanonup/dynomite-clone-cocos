@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
     _decorator,
     BoxCollider2D,
@@ -6,17 +5,11 @@ import {
     Collider2D,
     Component,
     Contact2DType,
-    EventTarget,
     Graphics,
     IPhysics2DContact,
     math,
-    Node,
-    Tween,
     UITransform,
 } from 'cc'
-=======
-import { _decorator, Collider2D, Component, Contact2DType, Graphics, UITransform } from 'cc'
->>>>>>> main
 import { GameplayPod } from '../Pods/GameplayPod'
 import { GameplayState } from '../States/GameplayState'
 import { EggView } from './EggView'
