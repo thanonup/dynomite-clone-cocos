@@ -19,7 +19,7 @@ export class ResultUIView extends Component {
     }
 
     public buttonCallBack() {
-        this.gameplayPod.gameplayPodEventTarget.emit('gameState', GameplayState.GamePlay)
+        this.gameplayPod.gameplayPodEventTarget.emit('gameState', GameplayState.PreStart)
     }
 
     protected onEnable(): void {

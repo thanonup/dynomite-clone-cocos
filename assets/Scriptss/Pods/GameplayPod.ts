@@ -9,7 +9,7 @@ export class GameplayPod {
     public beanEggDataList: Array<EggBean> = []
     public beanEggDataSpawnerList: Array<EggBean> = []
     public beanEggDataSlingList: Array<EggBean> = []
-    public gameState: GameplayState = GameplayState.GamePlay
+    public gameState: GameplayState = GameplayState.PreStart
     public nextEggSpawnBean: EggBean
 
     public eggInScene: EggView[] = []
