@@ -1,4 +1,4 @@
-import { _decorator, Component, EventMouse, Input, Prefab, UITransform, Vec2, Vec3 } from 'cc'
+import { _decorator, Component, EventMouse, Input, Node, Prefab, UITransform, Vec2, Vec3 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { SpawnerView } from './SpawnerView'
 import { GameplayPod } from './Pods/GameplayPod'
@@ -21,9 +21,15 @@ export class SlingShotController extends Component {
     @property({ type: EggView })
     egg: EggView
 
+    @property(Node)
+    private spawnerNode: Node
+
     power = 30
 
     private gameplayPod: GameplayPod
+    private isCanInteract: boolean = true
+
+    private idTimeOut: number
 
     public doInit() {
         this.gameplayPod = GameplayPod.instance
@@ -37,6 +43,21 @@ export class SlingShotController extends Component {
         this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
         this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
         this.spawnEgg()
+
+        this.gameplayPod.gameplayPodEventTarget.on('gameState', (gameState: GameplayState) => {
+            switch (gameState) {
+                case GameplayState.PreStart:
+                    this.spawnEgg()
+
+                    setTimeout(() => (this.isCanInteract = true), 500)
+                    break
+                case GameplayState.GameOver:
+                    clearTimeout(this.idTimeOut)
+                    this.isCanInteract = false
+                    this.egg?.onGameOver()
+                    break
+            }
+        })
     }
 
     private spawnEgg() {
@@ -49,8 +70,9 @@ export class SlingShotController extends Component {
             this.gameplayPod.beanEggDataList[Math.floor(Math.random() * this.gameplayPod.beanEggDataSlingList.length)]
         )
         this.egg = this.spawnerView.getFromPool().getComponent(EggView)
+        this.egg.isBullet = true
         this.egg.eggPod.ChangeBean(randomBean, false)
-        this.canvas.node.addChild(this.egg.node)
+        this.spawnerNode.addChild(this.egg.node)
         this.egg.node.position = this.node.position
         this.egg.collider.enabled = false
         this.egg.node.name = 'Egg Bullet ' + randomBean.type
@@ -68,6 +90,8 @@ export class SlingShotController extends Component {
     }
 
     private onMouseUp(event: EventMouse) {
+        if (!this.isCanInteract) return
+
         if (
             this.gameplayPod.gameState != GameplayState.GamePlay &&
             this.gameplayPod.gameState != GameplayState.PreStart
@@ -84,7 +108,7 @@ export class SlingShotController extends Component {
 
         this.egg = undefined
 
-        setTimeout(() => this.spawnEgg(), 1000)
+        this.idTimeOut = setTimeout(() => this.spawnEgg(), 1000)
     }
 
     private getDirectionformBall(event: EventMouse): any {

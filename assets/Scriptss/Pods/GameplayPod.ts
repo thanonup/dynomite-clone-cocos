@@ -17,6 +17,8 @@ export class GameplayPod {
     public gameplayPodEventTarget = new EventTarget()
     public firstLoad: boolean = false
 
+    public startSpeed: number = 0
+
     private static _instance: GameplayPod
 
     private static getInstance() {
@@ -80,5 +82,17 @@ export class GameplayPod {
         this.eggInScene.forEach((x) => x.eggPod.resetPod())
         this.eggInScene.forEach((x) => x.updateCollision())
         this.eggInScene.forEach((x) => x.checkFalling())
+    }
+
+    public restartGame() {
+        this.gameplayPodEventTarget.emit('score', 0)
+        this.gameplayPodEventTarget.emit('gameSpeed', this.startSpeed)
+        this.eggInScene = []
+
+        this.nextEggSpawnBean = undefined
+
+        this.beanEggDataSpawnerList = [this.beanEggDataList[0], this.beanEggDataList[1], this.beanEggDataList[2]]
+
+        this.beanEggDataSlingList = [this.beanEggDataList[0], this.beanEggDataList[1], this.beanEggDataList[2]]
     }
 }

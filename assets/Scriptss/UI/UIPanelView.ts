@@ -47,7 +47,7 @@ export class UIPanelView extends Component {
         this.resultNode.active = gameState == GameplayState.GameResult
         switch (gameState) {
             case GameplayState.GamePlay:
-                this.tweenUI(new Vec3(0, -480, 0))
+                this.tweenUI(new Vec3())
                 break
             case GameplayState.GameOver:
                 this.tweenUI(this.startPositionGameplayNode)

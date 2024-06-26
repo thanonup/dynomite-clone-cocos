@@ -45,6 +45,9 @@ export class SpawnerView extends Component {
     @property({ type: Node })
     private canvas: Node
 
+    @property({ type: Node })
+    private spawnerNode: Node
+
     @property({ type: BoxCollider2D })
     private collider: BoxCollider2D
 
@@ -71,6 +74,7 @@ export class SpawnerView extends Component {
         this.initPool()
 
         this.gameplayPod = GameplayPod.instance
+        this.gameplayPod.startSpeed = this.startGameSpeed
         this.gameplayPod.gameplayPodEventTarget.emit('gameSpeed', this.startGameSpeed)
 
         this.gameplayPod.beanEggDataSpawnerList = [
@@ -79,20 +83,20 @@ export class SpawnerView extends Component {
             this.gameplayPod.beanEggDataList[2],
         ]
 
-        this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
-            this.eggviewList.push(x)
-        })
-
-        for (let i = 1; i < this.settingEggRowAndColumn.y; i++) {
-            if (i % 2 == 0) {
-                this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, i * this.offset.y)
-            } else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, i * this.offset.y)
-        }
-
         this.isStart = true
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+
+        this.initPool()
+        this.restartGame()
+
+        this.gameplayPod.gameplayPodEventTarget.on('gameState', (gameState: GameplayState) => {
+            if (gameState == GameplayState.PreStart) {
+                this.gameplayPod.restartGame()
+                this.restartGame()
+            }
+        })
     }
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
@@ -112,6 +116,32 @@ export class SpawnerView extends Component {
             const index = this.eggviewList.indexOf(eggView, 0)
             if (index > -1) this.eggviewList.splice(index, 1)
         }
+    }
+
+    private restartGame() {
+        this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
+            this.eggviewList.push(x)
+        })
+
+        this.count = 0
+        for (let i = 1; i < this.settingEggRowAndColumn.y; i++) {
+            if (i % 2 == 0)
+                this.spawnEggGroup(
+                    this.settingEggRowAndColumn.x,
+                    0,
+                    this.offset.y * (this.settingEggRowAndColumn.y - i)
+                )
+            else
+                this.spawnEggGroup(
+                    this.settingEggRowAndColumn.x,
+                    this.offset.x,
+                    this.offset.y * (this.settingEggRowAndColumn.y - i)
+                )
+        }
+
+        this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
+            this.eggviewList.push(x)
+        })
     }
 
     private initPool() {
@@ -149,9 +179,9 @@ export class SpawnerView extends Component {
                 this.node.position.y - distanceY
             )
             egg.eggPod.ChangeBean(bean, true)
-
-            this.canvas.addChild(egg.node)
             egglist.push(egg)
+
+            this.spawnerNode.addChild(egg.node)
         }
 
         this.count++
