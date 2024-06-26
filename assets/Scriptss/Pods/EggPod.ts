@@ -47,19 +47,11 @@ export class EggPod {
         // console.log('add')
 
         eggView.eggPod.eggList.forEach((egg) => {
-            if (!this.eggList.find((x) => x == egg)) {
-                this.onAddEggList(egg)
-            }
+            if (!this.eggList.find((x) => x == egg)) this.eggList.push(eggView)
         })
 
         this.eggList.forEach((eggElement) => {
-            // eggView.eggPod.eggList.forEach((egg) => {
-            //     if (!eggElement.eggPod.eggList.find((x) => x == egg)) {
-            //         eggElement.eggPod.onAddEggList(egg)
-            //     }
-            // })
-
-            eggElement.eggPod.eggList = this.eggList
+            if (eggElement != this.eggView) eggElement.eggPod.eggList = this.eggList
         })
     }
 
@@ -70,8 +62,12 @@ export class EggPod {
 
     public removeEggFromEggList(eggView: EggView) {
         this.eggList.forEach((eggElement) => {
-            if (eggElement != eggView) eggElement.eggPod.onRemoveEggFromEggList(eggView)
+            if (eggElement != eggView) eggElement.eggPod.onRemoveFromEggList(eggView)
         })
+
+        // this.eggListInType.forEach((eggElement) => {
+        //     if (eggElement != eggView) eggElement.eggPod.onRemoveFromEggListInType(eggView)
+        // })
     }
 
     public resetPod() {
@@ -84,14 +80,17 @@ export class EggPod {
         this.eggListInType.push(this.eggView)
     }
 
-    public onRemoveEggFromEggList(eggView: EggView) {
+    public onRemoveFromEggList(eggView: EggView) {
         const index = this.eggList.indexOf(eggView, 0)
         if (index > -1) this.eggList.splice(index, 1)
-        // this.eventTarget.emit('EggListChange', this.eggList)
+    }
+
+    public onRemoveFromEggListInType(eggView: EggView) {
+        const index = this.eggListInType.indexOf(eggView, 0)
+        if (index > -1) this.eggListInType.splice(index, 1)
     }
 
     public addEggToEggListInType(eggView: EggView) {
-        // console.log('add in type')
         eggView.eggPod.eggListInType.forEach((egg) => {
             if (!this.eggListInType.find((x) => x == egg)) {
                 this.eggListInType.push(egg)
@@ -99,13 +98,7 @@ export class EggPod {
         })
 
         this.eggListInType.forEach((eggElement) => {
-            eggView.eggPod.eggListInType.forEach((egg) => {
-                if (!eggElement.eggPod.eggListInType.find((x) => x == egg)) {
-                    eggElement.eggPod.eggListInType.push(egg)
-                }
-            })
-
-            eggElement.eggPod.eggListInType = this.eggListInType
+            if (eggElement != this.eggView) eggElement.eggPod.eggListInType = this.eggListInType
         })
     }
 }

@@ -1,4 +1,4 @@
-import { EventTarget } from 'cc'
+import { EventTarget, UITransform } from 'cc'
 import { GameplayState } from '../States/GameplayState'
 import { EggBean } from '../Bean/EggBean'
 import { EggView } from '../Gameobject/EggView'
@@ -73,5 +73,12 @@ export class GameplayPod {
     public removeEggInScene(eggView: EggView) {
         var index = this.eggInScene.indexOf(eggView, 0)
         if (index > -1) this.eggInScene.splice(index, 1)
+    }
+
+    public updateCollision() {
+        this.eggInScene.sort((a, b) => b.node.position.y - a.node.position.y)
+        this.eggInScene.forEach((x) => x.eggPod.resetPod())
+        this.eggInScene.forEach((x) => x.updateCollision())
+        this.eggInScene.forEach((x) => x.checkFalling())
     }
 }

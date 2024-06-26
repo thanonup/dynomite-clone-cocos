@@ -53,6 +53,7 @@ export class SlingShotController extends Component {
         this.canvas.node.addChild(this.egg.node)
         this.egg.node.position = this.node.position
         this.egg.collider.enabled = false
+        this.egg.node.name = 'Egg Bullet ' + randomBean.type
     }
 
     update(deltaTime: number) {}
