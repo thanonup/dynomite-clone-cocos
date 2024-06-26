@@ -81,7 +81,14 @@ export class GameplayPod {
         this.eggInScene.sort((a, b) => b.node.position.y - a.node.position.y)
         this.eggInScene.forEach((x) => x.eggPod.resetPod())
         this.eggInScene.forEach((x) => x.updateCollision())
+        this.eggInScene.forEach((x) => (x.canFall = true))
         this.eggInScene.forEach((x) => x.checkFalling())
+
+        let count = this.eggInScene.length
+        for (let i = 0; i < count; i++) {
+            console.log(i)
+            this.eggInScene[i].getFalling()
+        }
     }
 
     public restartGame() {

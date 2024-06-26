@@ -46,13 +46,15 @@ export class EggPod {
     public addEggToEggList(eggView: EggView) {
         // console.log('add')
 
-        eggView.eggPod.eggList.forEach((egg) => {
-            if (!this.eggList.find((x) => x == egg)) this.eggList.push(eggView)
-        })
+        // eggView.eggPod.eggList.forEach((egg) => {
+        //     if (this.eggList.find((x) => x == egg) == undefined) this.eggList.push(eggView)
+        // })
 
-        this.eggList.forEach((eggElement) => {
-            if (eggElement != this.eggView) eggElement.eggPod.eggList = this.eggList
-        })
+        // this.eggList.forEach((eggElement) => {
+        //     if (eggElement != this.eggView) eggElement.eggPod.eggList = this.eggList
+        // })
+
+        if (this.eggList.find((x) => x == eggView) == undefined) this.eggList.push(eggView)
     }
 
     public onAddEggList(eggView: EggView) {

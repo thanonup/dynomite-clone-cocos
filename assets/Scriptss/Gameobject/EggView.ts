@@ -98,6 +98,8 @@ export class EggView extends Component {
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
+
+        this.gameplayPod.gameplayPodEventTarget.on('updateCollision', this.updateCollision, this)
     }
 
     public checkFalling() {
@@ -108,7 +110,12 @@ export class EggView extends Component {
             this.canFall =
                 this.node.position.y < this.node.parent.getComponent(UITransform).height / 2 - this.uiTransform.height
 
-        if (this.canFall) this.eggPod.eggList.forEach((x) => x.onBeforeDestory())
+        if (!this.canFall) this.eggPod.eggList.forEach((x) => (x.canFall = false))
+    }
+
+    public getFalling() {
+        if (this.isBullet) return
+        if (this.canFall) this.onBeforeDestory()
     }
 
     public updateCollision() {
@@ -118,8 +125,6 @@ export class EggView extends Component {
                 this.contactUpdate(egg)
             }
         })
-
-        if (this.eggPod.eggList.length < 2) this.onBeforeDestory()
     }
 
     private contactUpdate(egg: EggView) {
@@ -181,7 +186,6 @@ export class EggView extends Component {
 
         this.scheduleOnce(() => {
             if (this.eggPod.eggListInType.length > 2) {
-                console.log(this.gameplayPod.eggInScene.length)
                 this.eggPod.eggListInType.forEach((x) => {
                     x.onBeforeDestory()
                 })
@@ -242,9 +246,9 @@ export class EggView extends Component {
         if (GameplayPod.instance.gameState != GameplayState.GamePlay) return
 
         if (!this.isDestroying) {
-            this.canFall =
-                this.node.position.y <
-                this.node.parent.getComponent(UITransform).height / 2 - this.uiTransform.height / 2
+            // this.canFall =
+            //     this.node.position.y <
+            //     this.node.parent.getComponent(UITransform).height / 2 - this.uiTransform.height / 2
 
             if (this.isCollided) {
                 this.node.setPosition(this.targetPosition)
