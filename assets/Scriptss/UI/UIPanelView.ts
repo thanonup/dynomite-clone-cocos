@@ -10,6 +10,9 @@ const { ccclass, property } = _decorator
 @ccclass('UIPanelView')
 export class UIPanelView extends Component {
     @property(Node)
+    public preStartNode: Node
+
+    @property(Node)
     public gameplayNode: Node
 
     @property({ type: ScoreUIView })
@@ -44,6 +47,7 @@ export class UIPanelView extends Component {
     }
 
     public doOnGameStateChange(gameState: GameplayState) {
+        this.preStartNode.active = gameState == GameplayState.PreStart
         this.resultNode.active = gameState == GameplayState.GameResult
         switch (gameState) {
             case GameplayState.GamePlay:
