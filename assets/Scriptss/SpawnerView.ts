@@ -42,6 +42,9 @@ export class SpawnerView extends Component {
     @property({ type: Node })
     private canvas: Node
 
+    @property({ type: Node })
+    private spawnerNode: Node
+
     @property({ type: BoxCollider2D })
     private collider: BoxCollider2D
 
@@ -137,7 +140,7 @@ export class SpawnerView extends Component {
             )
             egg.eggPod.ChangeBean(bean, true)
 
-            this.canvas.addChild(egg.node)
+            this.spawnerNode.addChild(egg.node)
         }
 
         this.count++

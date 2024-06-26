@@ -74,6 +74,7 @@
     },
     "canvas": null,
     "spawnerView": null,
+    "spawnerNode": null,
     "_id": ""
   },
   {

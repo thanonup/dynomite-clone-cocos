@@ -1,4 +1,4 @@
-import { _decorator, Component, EventMouse, Input, Prefab, UITransform, Vec2, Vec3 } from 'cc'
+import { _decorator, Component, EventMouse, Input, Node, Prefab, UITransform, Vec2, Vec3 } from 'cc'
 import { EggView } from './Gameobject/EggView'
 import { SpawnerView } from './SpawnerView'
 import { GameplayPod } from './Pods/GameplayPod'
@@ -20,6 +20,9 @@ export class SlingShotController extends Component {
 
     @property({ type: EggView })
     egg: EggView
+
+    @property(Node)
+    private spawnerNode: Node
 
     power = 30
 
@@ -69,7 +72,7 @@ export class SlingShotController extends Component {
         this.egg = this.spawnerView.getFromPool().getComponent(EggView)
         this.egg.isBullet = true
         this.egg.eggPod.ChangeBean(randomBean, false)
-        this.canvas.node.addChild(this.egg.node)
+        this.spawnerNode.addChild(this.egg.node)
         this.egg.node.position = this.node.position
         this.egg.collider.enabled = false
     }
