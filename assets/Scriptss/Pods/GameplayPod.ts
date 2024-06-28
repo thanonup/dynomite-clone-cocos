@@ -86,7 +86,6 @@ export class GameplayPod {
 
         let count = this.eggInScene.length
         for (let i = 0; i < count; i++) {
-            console.log(i)
             this.eggInScene[i].getFalling()
         }
     }
