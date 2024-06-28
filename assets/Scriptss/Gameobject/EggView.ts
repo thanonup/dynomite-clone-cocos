@@ -162,7 +162,7 @@ export class EggView extends Component {
     private onClick(event: MouseEvent) {
         console.log(this.eggPod.eggList.length)
 
-        this.eggPod.eggList.forEach((x) => console.log(x.node.name))
+        //this.eggPod.eggList.forEach((x) => console.log(x.node.name))
 
         this.eggPod.eggList.forEach((x) => {
             x.eggSprite.color = math.color(255, 0, 0, 255)
