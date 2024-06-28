@@ -1,4 +1,4 @@
-import { _decorator, Component, resources } from 'cc'
+import { _decorator, Component, Graphics, resources } from 'cc'
 import { SpawnerView } from './SpawnerView'
 import { GameOverView } from './Gameobject/GameOverView'
 import { SlingShotController } from './SlingShotController'
@@ -9,6 +9,9 @@ const { ccclass, property } = _decorator
 
 @ccclass('GameInit')
 export class GameInit extends Component {
+    @property(Graphics)
+    private backgroundTrim: Graphics
+
     @property({
         type: SpawnerView,
     })
@@ -34,6 +37,11 @@ export class GameInit extends Component {
 
     private async init() {
         this.gameplayPod = GameplayPod.instance
+
+        const width = window.innerWidth * 2
+        const height = window.innerHeight * 2
+        this.backgroundTrim.rect(-width / 2, -height / 2, width, height)
+        this.backgroundTrim.fill()
 
         await this.loadEggData()
 

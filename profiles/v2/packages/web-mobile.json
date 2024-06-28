@@ -1,0 +1,52 @@
+{
+  "__version__": "1.0.1",
+  "builder": {
+    "common": {
+      "polyfills": {
+        "asyncFunctions": true
+      },
+      "buildPath": "project://build",
+      "outputName": "web-mobile",
+      "mainBundleCompressionType": "merge_dep",
+      "platform": "web-mobile",
+      "useSplashScreen": false,
+      "scenes": [
+        {
+          "url": "db://assets/Scenes/Gameplay.scene",
+          "uuid": "c0cec408-2ad3-4e18-a66b-14c2b20cb53b"
+        }
+      ],
+      "buildMode": "normal"
+    },
+    "taskOptionsMap": {
+      "1719545774163": {
+        "orientation": "auto",
+        "embedWebDebugger": false,
+        "__version__": "1.0.1"
+      },
+      "1719546478391": {
+        "orientation": "auto",
+        "embedWebDebugger": false,
+        "__version__": "1.0.1"
+      },
+      "1719548063879": {
+        "orientation": "portrait",
+        "embedWebDebugger": false,
+        "__version__": "1.0.1"
+      },
+      "1719548098801": {
+        "orientation": "portrait",
+        "embedWebDebugger": false,
+        "__version__": "1.0.1"
+      }
+    },
+    "__version__": "1.3.8",
+    "options": {
+      "web-mobile": {
+        "orientation": "portrait",
+        "embedWebDebugger": false,
+        "__version__": "1.0.1"
+      }
+    }
+  }
+}
