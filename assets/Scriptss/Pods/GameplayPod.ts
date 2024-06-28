@@ -85,8 +85,9 @@ export class GameplayPod {
         this.eggInScene.forEach((x) => x.checkFalling())
 
         let count = this.eggInScene.length
+
         for (let i = 0; i < count; i++) {
-            this.eggInScene[i].getFalling()
+            if (this.eggInScene[i] != undefined) this.eggInScene[i].getFalling()
         }
     }
 

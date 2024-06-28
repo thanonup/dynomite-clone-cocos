@@ -9,6 +9,7 @@ import {
     director,
     ERaycast2DType,
     EventMouse,
+    EventTouch,
     Graphics,
     Input,
     Node,
@@ -65,13 +66,13 @@ export class SlingShotController extends Component {
             this.gameplayPod.beanEggDataList[2],
         ]
 
-        this.canvas.node.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this)
-        this.canvas.node.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this)
-        this.canvas.node.on(Input.EventType.MOUSE_UP, this.onMouseUp, this)
-
         this.canvas.node.on(Input.EventType.TOUCH_START, this.onMouseDown, this)
         this.canvas.node.on(Input.EventType.TOUCH_MOVE, this.onMouseMove, this)
         this.canvas.node.on(Input.EventType.TOUCH_END, this.onMouseUp, this)
+
+        // this.canvas.node.on(Input.EventType.TOUCH_START, this.onMouseDown, this)
+        // this.canvas.node.on(Input.EventType.TOUCH_MOVE, this.onMouseMove, this)
+        // this.canvas.node.on(Input.EventType.TOUCH_END, this.onMouseUp, this)
 
         this.spawnEgg()
 
@@ -227,7 +228,7 @@ export class SlingShotController extends Component {
         } else return undefined
     }
 
-    private onMouseUp(event: EventMouse) {
+    private onMouseUp(event: EventTouch) {
         if (!this.isCanInteract) return
 
         if (
@@ -258,18 +259,18 @@ export class SlingShotController extends Component {
         return endpoint
     }
 
-    private getDirectionformBall(event: EventMouse): any {
+    private getDirectionformBall(event: EventTouch): any {
         return this.subTractionVec2(
             this.getMousePositionInCanvas(event),
             this.convertVec3ToVec2(this.egg.node.position)
         ).normalize()
     }
 
-    private getMousePositionInCanvas(event: EventMouse): Vec2 {
+    private getMousePositionInCanvas(event: EventTouch): Vec2 {
         var position = new Vec2()
 
-        position.x = event.getUILocationX() - this.canvas.width / 2
-        position.y = event.getUILocationY() - this.canvas.height / 2
+        position.x = event.getUILocation().x - this.canvas.width / 2
+        position.y = event.getUILocation().y - this.canvas.height / 2
 
         return position
     }

@@ -98,8 +98,6 @@ export class EggView extends Component {
 
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
-
-        this.gameplayPod.gameplayPodEventTarget.on('updateCollision', this.updateCollision, this)
     }
 
     public checkFalling() {
@@ -118,11 +116,14 @@ export class EggView extends Component {
         if (this.canFall) this.onBeforeDestory()
     }
 
-    public updateCollision() {
+    public updateCollision(position?: Vec3) {
+        if (position == undefined) position = this.node.position
         this.gameplayPod.eggInScene.forEach((egg) => {
-            var distance = Vec2.distance(egg.node.position, this.node.position)
-            if (distance < this.uiTransform.width + this.uiTransform.width / 2) {
-                this.contactUpdate(egg)
+            if (!egg.isDestroying) {
+                var distance = Vec2.distance(egg.node.position, position)
+                if (distance < this.uiTransform.width + this.uiTransform.width / 2) {
+                    this.contactUpdate(egg)
+                }
             }
         })
     }
@@ -184,22 +185,22 @@ export class EggView extends Component {
         this.rb.linearVelocity = new Vec2(0, 0)
         this.isOnGrid = true
 
-        this.scheduleOnce(() => {
-            if (this.eggPod.eggListInType.length > 2) {
-                this.eggPod.eggListInType.forEach((x) => {
-                    x.onBeforeDestory()
-                })
+        this.updateCollision(this.targetPosition)
 
-                if (!this.eggPod.findIsPlayingSoundDestroy()) {
-                    this.eggPod.isPlayingSoundDestroy = true
-                    this.onAudioPlay('destroyClip')
-                }
+        if (this.eggPod.eggListInType.length > 2) {
+            this.eggPod.eggListInType.forEach((x) => {
+                x.onBeforeDestory()
+            })
 
-                this.gameplayPod.updateCollision()
-            } else this.onAudioPlay('contactClip')
+            if (!this.eggPod.findIsPlayingSoundDestroy()) {
+                this.eggPod.isPlayingSoundDestroy = true
+                this.onAudioPlay('destroyClip')
+            }
 
-            this.isBullet = false
-        }, 0.1)
+            this.gameplayPod.updateCollision()
+        } else this.onAudioPlay('contactClip')
+
+        this.isBullet = false
     }
 
     private getGridPosition(selfCollider: Collider2D, otherCollider: Collider2D): Vec3 {
@@ -269,9 +270,6 @@ export class EggView extends Component {
     public onBeforeDestory() {
         if (this.isDestroying) return
 
-        this.gameplayPod.removeEggInScene(this)
-        this.eggPod.removeEggFromEggList(this)
-
         if (this.eggPod.currentLine == GameConfig.NEXT_SLING_SPAWN_NEW_EGG_1) {
             if (this.gameplayPod.beanEggDataSlingList.indexOf(this.gameplayPod.beanEggDataList[3]) == -1) {
                 this.gameplayPod.beanEggDataSlingList.push(this.gameplayPod.beanEggDataList[3])
@@ -328,16 +326,6 @@ export class EggView extends Component {
             var eggView = otherCollider.getComponent(EggView)
             if (eggView.isDestroying) return
 
-            // if (!this.eggPod.eggList.find((x) => x == eggView)) {
-            //     //add new egg at list for all element in list
-            //     this.eggPod.addEggToEggList(eggView)
-            // }
-
-            // // add new same type egg at list
-            // if (eggView.eggPod.bean.type == this.eggPod.bean.type) {
-            //     if (!this.eggPod.eggListInType.find((x) => x == eggView)) this.eggPod.addEggToEggListInType(eggView)
-            // }
-
             this.contactUpdate(eggView)
 
             if (this.isBullet) this.OnEggCollision(selfCollider, otherCollider)
@@ -345,6 +333,8 @@ export class EggView extends Component {
     }
 
     public returnToPool() {
+        this.gameplayPod.removeEggInScene(this)
+        this.eggPod.removeEggFromEggList(this)
         this.eggPod.resetPod()
         this.isCollided = false
         this.isOnGrid = false
