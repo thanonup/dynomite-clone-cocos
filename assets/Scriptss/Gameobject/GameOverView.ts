@@ -42,7 +42,7 @@ export class GameOverView extends Component {
 
     public doInit() {
         console.log('Init GameOverView')
-        console.log('Color ' + this.gameoverLine.fillColor)
+        //console.log('Color ' + this.gameoverLine.fillColor)
 
         this.gameplayPod = GameplayPod.instance
 
