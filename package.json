@@ -1,7 +1,14 @@
 {
-  "name": "dynomite-clone",
-  "uuid": "1d6ab1e4-8184-4e39-9323-20ab78207d90",
-  "creator": {
-    "version": "3.8.3"
-  }
+    "name": "dynomite-clone",
+    "homepage": ".",
+    "uuid": "1d6ab1e4-8184-4e39-9323-20ab78207d90",
+    "creator": {
+        "version": "3.8.3"
+    },
+    "scripts": {
+        "deploy": "gh-pages -d build/web-mobile"
+    },
+    "dependencies": {
+        "gh-pages": "^6.1.1"
+    }
 }
