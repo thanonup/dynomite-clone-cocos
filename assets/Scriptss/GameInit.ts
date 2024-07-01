@@ -59,7 +59,7 @@ export class GameInit extends Component {
                 if (err) {
                     reject(err)
                 } else {
-                    console.log('Load EggData is Done')
+                    // console.log('Load EggData is Done')
                     this.gameplayPod.beanEggDataList = asset.json
 
                     resolve('load done')
