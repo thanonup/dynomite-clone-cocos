@@ -118,14 +118,12 @@ export class SpawnerView extends Component {
     }
 
     private restartGame() {
-        this.isStart = false
         this.eggviewList = []
         this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
             this.eggviewList.push(x)
         })
-        this.count = 0
         for (let i = 1; i < this.settingEggRowAndColumn.y; i++) {
-            if (i % 2 == 1)
+            if (i % 2 == 0)
                 this.spawnEggGroup(
                     this.settingEggRowAndColumn.x,
                     0,
@@ -138,7 +136,7 @@ export class SpawnerView extends Component {
                     this.offset.y * (this.settingEggRowAndColumn.y - i)
                 )
         }
-
+        this.count = 0
         this.isStart = true
     }
 
@@ -202,7 +200,7 @@ export class SpawnerView extends Component {
 
         if (!this.isStart) return
         if (this.eggviewList.length == 0) {
-            console.log('spawn')
+            console.log(this.count)
             if (this.count % 2 == 1)
                 this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
                     this.eggviewList.push(x)
