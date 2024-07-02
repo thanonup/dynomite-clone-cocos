@@ -258,7 +258,7 @@ export class EggView extends Component {
 
             if (this.isOnGrid) {
                 this.rb.angularVelocity = 0.001
-                this.node.setRotation(new math.Quat())
+                this.node.setRotation(math.Quat.IDENTITY)
                 var yPosition = this.node.position.y - this.speedMove * deltaTime
                 this.node.setPosition(this.node.position.x, yPosition, 0)
 
