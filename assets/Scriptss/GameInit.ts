@@ -5,6 +5,7 @@ import { SlingShotController } from './SlingShotController'
 import { GameplayPod } from './Pods/GameplayPod'
 import { UIPanelView } from './UI/UIPanelView'
 import { LoaddingUIView } from './UI/LoaddingUIView'
+import { GameSpeedControllerView } from './GameSpeedControllerView'
 const { ccclass, property } = _decorator
 
 @ccclass('GameInit')
@@ -18,6 +19,11 @@ export class GameInit extends Component {
         type: GameOverView,
     })
     public gameOverView: GameOverView
+
+    @property({
+        type: GameSpeedControllerView,
+    })
+    public gameSpeedControllerView: GameSpeedControllerView
 
     @property(UIPanelView)
     public uiPanelView: UIPanelView
@@ -41,6 +47,7 @@ export class GameInit extends Component {
         this.gameOverView.doInit()
         this.slingshotController.doInit()
         this.uiPanelView.doInit()
+        this.gameSpeedControllerView.doInit()
 
         LoaddingUIView.Instance.hideLoadding()
     }

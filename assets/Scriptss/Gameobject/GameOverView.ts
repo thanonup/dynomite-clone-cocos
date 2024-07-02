@@ -13,6 +13,7 @@ import {
 import { GameplayPod } from '../Pods/GameplayPod'
 import { GameplayState } from '../States/GameplayState'
 import { EggView } from './EggView'
+import { GameSpeedControllerView } from '../GameSpeedControllerView'
 
 const { ccclass, property } = _decorator
 
@@ -57,7 +58,6 @@ export class GameOverView extends Component {
 
         this.warningColiider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContactWarning, this)
         this.warningColiider.on(Contact2DType.END_CONTACT, this.onEndContactWarning, this)
-
         this.gameOverColiider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.gameOverColiider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
 

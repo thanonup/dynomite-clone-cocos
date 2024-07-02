@@ -60,7 +60,6 @@ export class SpawnerView extends Component {
     private gameplayPod: GameplayPod
 
     private heightSize: number
-    private timer: number = 0
     private count: number = 0
 
     private isStart: boolean = false
@@ -85,7 +84,7 @@ export class SpawnerView extends Component {
 
         this.isStart = true
 
-        this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
+        // this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this)
         this.collider.on(Contact2DType.END_CONTACT, this.onEndContact, this)
 
         this.initPool()
@@ -99,15 +98,15 @@ export class SpawnerView extends Component {
         })
     }
 
-    onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
-        if (otherCollider.tag == 99) {
-            var eggView = otherCollider.getComponent(EggView)
+    // onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
+    //     if (otherCollider.tag == 99) {
+    //         var eggView = otherCollider.getComponent(EggView)
 
-            if (eggView.isOnGrid && !this.eggviewList.find((x) => x == eggView)) {
-                this.eggviewList.push(eggView)
-            }
-        }
-    }
+    //         if (eggView.isOnGrid && !this.eggviewList.find((x) => x == eggView)) {
+    //             this.eggviewList.push(eggView)
+    //         }
+    //     }
+    // }
 
     onEndContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact | null) {
         if (otherCollider.tag == 99) {
@@ -119,7 +118,9 @@ export class SpawnerView extends Component {
     }
 
     private restartGame() {
-        this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, 0).forEach((x) => {
+        this.isStart = false
+        this.eggviewList = []
+        this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
             this.eggviewList.push(x)
         })
         this.count = 0
@@ -200,11 +201,16 @@ export class SpawnerView extends Component {
         if (GameplayPod.instance.gameState != GameplayState.GamePlay) return
 
         if (!this.isStart) return
-        this.timer += deltaTime * this.startGameSpeed
         if (this.eggviewList.length == 0) {
-            this.timer = 0
-            if (this.count % 2 == 1) this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0)
-            else this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, 0)
+            console.log('spawn')
+            if (this.count % 2 == 1)
+                this.spawnEggGroup(this.settingEggRowAndColumn.x, 0, 0).forEach((x) => {
+                    this.eggviewList.push(x)
+                })
+            else
+                this.spawnEggGroup(this.settingEggRowAndColumn.x, this.offset.x, 0).forEach((x) => {
+                    this.eggviewList.push(x)
+                })
         }
     }
 }
